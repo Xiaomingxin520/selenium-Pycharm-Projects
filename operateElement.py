@@ -7,9 +7,7 @@
 3. 降低 Page 层复杂度
 """
 
-import time
 from functools import wraps
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
