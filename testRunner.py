@@ -5,7 +5,6 @@ import json
 import shutil
 import subprocess
 import time
-import os
 import platform
 from pathlib import Path
 import requests
@@ -223,9 +222,9 @@ def run_tests() -> Path:
 # ====================== 入口 ======================
 if __name__ == "__main__":
     # 清理残留的 Chrome 进程，防止端口占用
-    print("🧹 清理残留 Chrome 进程...")
-    os.system('taskkill /f /im chromedriver.exe >nul 2>&1')
-    os.system('taskkill /f /im chrome.exe >nul 2>&1')
+    # print("🧹 清理残留 Chrome 进程...")
+    # os.system('taskkill /f /im chromedriver.exe >nul 2>&1')
+    # os.system('taskkill /f /im chrome.exe >nul 2>&1')
 
     report_path = run_tests()
     print(f"\n报告生成路径：{report_path}")

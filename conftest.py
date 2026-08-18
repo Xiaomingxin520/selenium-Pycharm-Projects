@@ -6,7 +6,6 @@
 
 import json
 import pytest
-import datetime
 from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
