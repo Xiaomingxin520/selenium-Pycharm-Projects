@@ -1,0 +1,166 @@
+{
+  "passed": [
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852-96526666-123456-\\u767b\\u5165\\u6210\\u529f-TC_LOGIN_001-Py_Hopetrip_1-TRUE-\\u9999\\u6e2f\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u6210\\u529f]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852-96526666-654321-\\u767b\\u5165\\u5931\\u6557\\uff0c\\u624b\\u6a5f\\u865f/\\u5bc6\\u78bc\\u932f\\u8aa4-TC_LOGIN_002-Py_Hopetrip_2-FALSE-\\u9999\\u6e2f\\u624b\\u673a\\u53f7+\\u9519\\u8bef\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852-96526666--\\u8acb\\u8f38\\u5165\\u5bc6\\u78bc-TC_LOGIN_003-Py_Hopetrip_3-FALSE-\\u9999\\u6e2f\\u624b\\u673a\\u53f7+\\u7a7a\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852-96521010-123456-\\u767b\\u5165\\u8cec\\u865f\\u932f\\u8aa4-TC_LOGIN_004-Py_Hopetrip_4-FALSE-\\u672a\\u6ce8\\u518c\\u7684\\u9999\\u6e2f\\u624b\\u673a\\u53f7\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852-965210111-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_005-Py_Hopetrip_5-FALSE-\\u9519\\u8bef\\u683c\\u5f0f\\u7684\\u9999\\u6e2f\\u624b\\u673a\\u53f7\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852--123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_006-Py_Hopetrip_6-FALSE-\\u7a7a\\u9999\\u6e2f\\u533a\\u53f7\\u624b\\u673a\\u53f7\\u52a0\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852---\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_007-Py_Hopetrip_7-FALSE-\\u7a7a\\u9999\\u6e2f\\u533a\\u53f7\\u624b\\u673a\\u53f7\\u548c\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852-jfiwenijewjfe32\\u51fb\\u53cc\\u51fb\\u5927\\u53e3\\u5927\\u53e313131321-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_008-Py_Hopetrip_8-FALSE-\\u8d85\\u957f\\u683c\\u5f0f\\u9999\\u6e2f\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852-961-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_009-Py_Hopetrip_9-FALSE-\\u8d85\\u77ed\\u683c\\u5f0f\\u9999\\u6e2f\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+852-18502160291-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_010-Py_Hopetrip_10-FALSE-\\u9519\\u8bef\\u533a\\u53f7\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853-65202623-123456-\\u767b\\u5165\\u6210\\u529f-TC_LOGIN_011-Py_Hopetrip_11-TRUE-\\u6fb3\\u95e8\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u6210\\u529f]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853-65202623-654321-\\u767b\\u5165\\u5931\\u6557\\uff0c\\u624b\\u6a5f\\u865f/\\u5bc6\\u78bc\\u932f\\u8aa4-TC_LOGIN_012-Py_Hopetrip_12-FALSE-\\u6fb3\\u95e8\\u624b\\u673a\\u53f7+\\u9519\\u8bef\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853-65202623--\\u8acb\\u8f38\\u5165\\u5bc6\\u78bc-TC_LOGIN_013-Py_Hopetrip_13-FALSE-\\u6fb3\\u95e8\\u624b\\u673a\\u53f7+\\u7a7a\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853-65202611-123456-\\u767b\\u5165\\u8cec\\u865f\\u932f\\u8aa4-TC_LOGIN_014-Py_Hopetrip_14-FALSE-\\u672a\\u6ce8\\u518c\\u6fb3\\u95e8\\u7684\\u624b\\u673a\\u53f7\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853-652sdfgdsf--\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_015-Py_Hopetrip_15-FALSE-\\u9519\\u8bef\\u683c\\u5f0f\\u7684\\u6fb3\\u95e8\\u624b\\u673a\\u52a0\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853--123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_016-Py_Hopetrip_16-FALSE-\\u7a7a\\u6fb3\\u95e8\\u533a\\u53f7\\u624b\\u673a\\u53f7\\u52a0\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853---\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_017-Py_Hopetrip_17-FALSE-\\u7a7a\\u6fb3\\u95e8\\u533a\\u53f7\\u624b\\u673a\\u53f7\\u548c\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853-jfiwenijewjfeiwojfeiow\\u70b9\\u51fb\\u53cc\\u51fb\\u5927\\u53e3\\u5927\\u53e313131321-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_018-Py_Hopetrip_18-FALSE-\\u8d85\\u957f\\u683c\\u5f0f\\u5927\\u9646\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853-652-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_019-Py_Hopetrip_19-FALSE-\\u8d85\\u77ed\\u683c\\u5f0f\\u6fb3\\u95e8\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+853-96526666-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_020-Py_Hopetrip_20-FALSE-\\u9519\\u8bef\\u533a\\u53f7\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886-0900188188-123456-\\u767b\\u5165\\u6210\\u529f-TC_LOGIN_021-Py_Hopetrip_21-TRUE-\\u53f0\\u6e7e\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u6210\\u529f]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886-0900188188-654321-\\u767b\\u5165\\u5931\\u6557\\uff0c\\u624b\\u6a5f\\u865f/\\u5bc6\\u78bc\\u932f\\u8aa4-TC_LOGIN_022-Py_Hopetrip_22-FALSE-\\u53f0\\u6e7e\\u624b\\u673a\\u53f7+\\u9519\\u8bef\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886-0900188188--\\u8acb\\u8f38\\u5165\\u5bc6\\u78bc-TC_LOGIN_023-Py_Hopetrip_23-FALSE-\\u53f0\\u6e7e\\u624b\\u673a\\u53f7+\\u7a7a\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886-0900188186-123456-\\u767b\\u5165\\u8cec\\u865f\\u932f\\u8aa4-TC_LOGIN_024-Py_Hopetrip_24-FALSE-\\u672a\\u6ce8\\u518c\\u53f0\\u6e7e\\u7684\\u624b\\u673a\\u53f7\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886-0900sdfgdsf--\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_025-Py_Hopetrip_25-FALSE-\\u9519\\u8bef\\u683c\\u5f0f\\u7684\\u53f0\\u6e7e\\u624b\\u673a\\u52a0\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886--123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_026-Py_Hopetrip_26-FALSE-\\u7a7a\\u53f0\\u6e7e\\u533a\\u53f7\\u624b\\u673a\\u53f7\\u52a0\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886---\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_027-Py_Hopetrip_27-FALSE-\\u7a7a\\u53f0\\u6e7e\\u533a\\u53f7\\u624b\\u673a\\u53f7\\u548c\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886-jfiwenijewjfeiwojfeiow\\u70b9\\u51fb\\u53cc\\u51fb\\u5927\\u53e3\\u5927\\u53e313131321-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_028-Py_Hopetrip_28-FALSE-\\u8d85\\u957f\\u683c\\u5f0f\\u53f0\\u6e7e\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886-0900-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_029-Py_Hopetrip_29-FALSE-\\u8d85\\u77ed\\u683c\\u5f0f\\u53f0\\u6e7e\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+886-18502160291-123456-\\u767b\\u5165\\u8cec\\u865f\\u932f\\u8aa4-TC_LOGIN_030-Py_Hopetrip_30-FALSE-\\u9519\\u8bef\\u533a\\u53f7\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86-18502160291-123456-\\u767b\\u5165\\u6210\\u529f-TC_LOGIN_031-Py_Hopetrip_31-TRUE-\\u5927\\u9646\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u6210\\u529f]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86-18502160291-654321-\\u767b\\u5165\\u5931\\u6557\\uff0c\\u624b\\u6a5f\\u865f/\\u5bc6\\u78bc\\u932f\\u8aa4-TC_LOGIN_032-Py_Hopetrip_32-FALSE-\\u5927\\u9646\\u624b\\u673a\\u53f7+\\u9519\\u8bef\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86-18502160291--\\u8acb\\u8f38\\u5165\\u5bc6\\u78bc-TC_LOGIN_033-Py_Hopetrip_33-FALSE-\\u5927\\u9646\\u624b\\u673a\\u53f7+\\u7a7a\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86-18825666988-123456-\\u767b\\u5165\\u8cec\\u865f\\u932f\\u8aa4-TC_LOGIN_034-Py_Hopetrip_34-FALSE-\\u672a\\u6ce8\\u518c\\u5927\\u9646\\u7684\\u624b\\u673a\\u53f7\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86-18502sdfgdsf--\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_035-Py_Hopetrip_35-FALSE-\\u9519\\u8bef\\u683c\\u5f0f\\u7684\\u5927\\u9646\\u624b\\u673a\\u52a0\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86--123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_036-Py_Hopetrip_36-FALSE-\\u7a7a\\u5927\\u9646\\u533a\\u53f7\\u624b\\u673a\\u53f7\\u52a0\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86---\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_037-Py_Hopetrip_37-FALSE-\\u7a7a\\u5927\\u9646\\u533a\\u53f7\\u624b\\u673a\\u53f7\\u548c\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86-jfiwenijewjfeiwojfeiow\\u70b9\\u51fb\\u53cc\\u51fb\\u5927\\u53e3\\u5927\\u53e313131321-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_038-Py_Hopetrip_38-FALSE-\\u8d85\\u957f\\u683c\\u5f0f\\u5927\\u9646\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86-185-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_039-Py_Hopetrip_39-FALSE-\\u8d85\\u77ed\\u683c\\u5f0f\\u5927\\u9646\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[+86-0900188188-123456-\\u8acb\\u8f38\\u5165\\u6b63\\u78ba\\u7684\\u5730\\u5340\\u865f\\u548c\\u624b\\u6a5f\\u865f-TC_LOGIN_040-Py_Hopetrip_40-FALSE-\\u9519\\u8bef\\u533a\\u53f7\\u624b\\u673a\\u53f7+\\u6b63\\u786e\\u5bc6\\u7801\\u767b\\u5f55\\u5931\\u8d25]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    }
+  ],
+  "failed": [],
+  "exit_code": 0
+}

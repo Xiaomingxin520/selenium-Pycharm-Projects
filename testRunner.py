@@ -211,8 +211,8 @@ def run_tests() -> Path:
     # 定制报告标题
     customize_allure_report()
 
-    # print("\n正在发送企微通知...")
-    # send_wecom_notification(start_time)
+    print("\n正在发送企微通知...")
+    send_wecom_notification(start_time)
 
     # 后台启动 Allure 服务
     launch_allure_server_background(raw_dir)

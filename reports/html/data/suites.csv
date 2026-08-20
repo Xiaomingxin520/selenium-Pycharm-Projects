@@ -1,0 +1,241 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"case_id: TC_LOGIN_038
+source_case: Py_Hopetrip_38
+area_code: +86
+phone: jfiwenijewjfeiwojfeiow点击双击大口大口13131321
+expect_text: 請輸入正確的地區號和手機號
+description: 超长格式大陆手机号+正确密码登录失败","15674","TC_LOGIN_038 - 超长格式大陆手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_017
+source_case: Py_Hopetrip_17
+area_code: +853
+phone: 
+expect_text: 請輸入正確的地區號和手機號
+description: 空澳门区号手机号和密码登录失败","15763","TC_LOGIN_017 - 空澳门区号手机号和密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_024
+source_case: Py_Hopetrip_24
+area_code: +886
+phone: 0900188186
+expect_text: 登入賬號錯誤
+description: 未注册台湾的手机号登录失败","15872","TC_LOGIN_024 - 未注册台湾的手机号登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_021
+source_case: Py_Hopetrip_21
+area_code: +886
+phone: 0900188188
+expect_text: 登入成功
+description: 台湾手机号+正确密码登录成功","15738","TC_LOGIN_021 - 台湾手机号+正确密码登录成功","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_015
+source_case: Py_Hopetrip_15
+area_code: +853
+phone: 652sdfgdsf
+expect_text: 請輸入正確的地區號和手機號
+description: 错误格式的澳门手机加密码登录失败","15670","TC_LOGIN_015 - 错误格式的澳门手机加密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_039
+source_case: Py_Hopetrip_39
+area_code: +86
+phone: 185
+expect_text: 請輸入正確的地區號和手機號
+description: 超短格式大陆手机号+正确密码登录失败","15715","TC_LOGIN_039 - 超短格式大陆手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_020
+source_case: Py_Hopetrip_20
+area_code: +853
+phone: 96526666
+expect_text: 請輸入正確的地區號和手機號
+description: 错误区号手机号+正确密码登录失败","15813","TC_LOGIN_020 - 错误区号手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_032
+source_case: Py_Hopetrip_32
+area_code: +86
+phone: 18502160291
+expect_text: 登入失敗，手機號/密碼錯誤
+description: 大陆手机号+错误密码登录失败","15658","TC_LOGIN_032 - 大陆手机号+错误密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_013
+source_case: Py_Hopetrip_13
+area_code: +853
+phone: 65202623
+expect_text: 請輸入密碼
+description: 澳门手机号+空密码登录失败","15643","TC_LOGIN_013 - 澳门手机号+空密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_022
+source_case: Py_Hopetrip_22
+area_code: +886
+phone: 0900188188
+expect_text: 登入失敗，手機號/密碼錯誤
+description: 台湾手机号+错误密码登录失败","15816","TC_LOGIN_022 - 台湾手机号+错误密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_033
+source_case: Py_Hopetrip_33
+area_code: +86
+phone: 18502160291
+expect_text: 請輸入密碼
+description: 大陆手机号+空密码登录失败","15570","TC_LOGIN_033 - 大陆手机号+空密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_001
+source_case: Py_Hopetrip_1
+area_code: +852
+phone: 96526666
+expect_text: 登入成功
+description: 香港手机号+正确密码登录成功","15643","TC_LOGIN_001 - 香港手机号+正确密码登录成功","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_012
+source_case: Py_Hopetrip_12
+area_code: +853
+phone: 65202623
+expect_text: 登入失敗，手機號/密碼錯誤
+description: 澳门手机号+错误密码登录失败","15698","TC_LOGIN_012 - 澳门手机号+错误密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_037
+source_case: Py_Hopetrip_37
+area_code: +86
+phone: 
+expect_text: 請輸入正確的地區號和手機號
+description: 空大陆区号手机号和密码登录失败","15576","TC_LOGIN_037 - 空大陆区号手机号和密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_011
+source_case: Py_Hopetrip_11
+area_code: +853
+phone: 65202623
+expect_text: 登入成功
+description: 澳门手机号+正确密码登录成功","15825","TC_LOGIN_011 - 澳门手机号+正确密码登录成功","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_008
+source_case: Py_Hopetrip_8
+area_code: +852
+phone: jfiwenijewjfe32击双击大口大口13131321
+expect_text: 請輸入正確的地區號和手機號
+description: 超长格式香港手机号+正确密码登录失败","15686","TC_LOGIN_008 - 超长格式香港手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_027
+source_case: Py_Hopetrip_27
+area_code: +886
+phone: 
+expect_text: 請輸入正確的地區號和手機號
+description: 空台湾区号手机号和密码登录失败","15544","TC_LOGIN_027 - 空台湾区号手机号和密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_006
+source_case: Py_Hopetrip_6
+area_code: +852
+phone: 
+expect_text: 請輸入正確的地區號和手機號
+description: 空香港区号手机号加密码登录失败","15366","TC_LOGIN_006 - 空香港区号手机号加密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_016
+source_case: Py_Hopetrip_16
+area_code: +853
+phone: 
+expect_text: 請輸入正確的地區號和手機號
+description: 空澳门区号手机号加密码登录失败","15783","TC_LOGIN_016 - 空澳门区号手机号加密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_035
+source_case: Py_Hopetrip_35
+area_code: +86
+phone: 18502sdfgdsf
+expect_text: 請輸入正確的地區號和手機號
+description: 错误格式的大陆手机加密码登录失败","15599","TC_LOGIN_035 - 错误格式的大陆手机加密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_029
+source_case: Py_Hopetrip_29
+area_code: +886
+phone: 0900
+expect_text: 請輸入正確的地區號和手機號
+description: 超短格式台湾手机号+正确密码登录失败","15704","TC_LOGIN_029 - 超短格式台湾手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_010
+source_case: Py_Hopetrip_10
+area_code: +852
+phone: 18502160291
+expect_text: 請輸入正確的地區號和手機號
+description: 错误区号手机号+正确密码登录失败","15780","TC_LOGIN_010 - 错误区号手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_040
+source_case: Py_Hopetrip_40
+area_code: +86
+phone: 0900188188
+expect_text: 請輸入正確的地區號和手機號
+description: 错误区号手机号+正确密码登录失败","15665","TC_LOGIN_040 - 错误区号手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_025
+source_case: Py_Hopetrip_25
+area_code: +886
+phone: 0900sdfgdsf
+expect_text: 請輸入正確的地區號和手機號
+description: 错误格式的台湾手机加密码登录失败","15776","TC_LOGIN_025 - 错误格式的台湾手机加密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_028
+source_case: Py_Hopetrip_28
+area_code: +886
+phone: jfiwenijewjfeiwojfeiow点击双击大口大口13131321
+expect_text: 請輸入正確的地區號和手機號
+description: 超长格式台湾手机号+正确密码登录失败","15789","TC_LOGIN_028 - 超长格式台湾手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_009
+source_case: Py_Hopetrip_9
+area_code: +852
+phone: 961
+expect_text: 請輸入正確的地區號和手機號
+description: 超短格式香港手机号+正确密码登录失败","15681","TC_LOGIN_009 - 超短格式香港手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_007
+source_case: Py_Hopetrip_7
+area_code: +852
+phone: 
+expect_text: 請輸入正確的地區號和手機號
+description: 空香港区号手机号和密码登录失败","15564","TC_LOGIN_007 - 空香港区号手机号和密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_003
+source_case: Py_Hopetrip_3
+area_code: +852
+phone: 96526666
+expect_text: 請輸入密碼
+description: 香港手机号+空密码登录失败","15619","TC_LOGIN_003 - 香港手机号+空密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_023
+source_case: Py_Hopetrip_23
+area_code: +886
+phone: 0900188188
+expect_text: 請輸入密碼
+description: 台湾手机号+空密码登录失败","15730","TC_LOGIN_023 - 台湾手机号+空密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_005
+source_case: Py_Hopetrip_5
+area_code: +852
+phone: 965210111
+expect_text: 請輸入正確的地區號和手機號
+description: 错误格式的香港手机号登录失败","15661","TC_LOGIN_005 - 错误格式的香港手机号登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_036
+source_case: Py_Hopetrip_36
+area_code: +86
+phone: 
+expect_text: 請輸入正確的地區號和手機號
+description: 空大陆区号手机号加密码登录失败","15610","TC_LOGIN_036 - 空大陆区号手机号加密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_030
+source_case: Py_Hopetrip_30
+area_code: +886
+phone: 18502160291
+expect_text: 登入賬號錯誤
+description: 错误区号手机号+正确密码登录失败","15684","TC_LOGIN_030 - 错误区号手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_034
+source_case: Py_Hopetrip_34
+area_code: +86
+phone: 18825666988
+expect_text: 登入賬號錯誤
+description: 未注册大陆的手机号登录失败","15612","TC_LOGIN_034 - 未注册大陆的手机号登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_014
+source_case: Py_Hopetrip_14
+area_code: +853
+phone: 65202611
+expect_text: 登入賬號錯誤
+description: 未注册澳门的手机号登录失败","15684","TC_LOGIN_014 - 未注册澳门的手机号登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_004
+source_case: Py_Hopetrip_4
+area_code: +852
+phone: 96521010
+expect_text: 登入賬號錯誤
+description: 未注册的香港手机号登录失败","15398","TC_LOGIN_004 - 未注册的香港手机号登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_018
+source_case: Py_Hopetrip_18
+area_code: +853
+phone: jfiwenijewjfeiwojfeiow点击双击大口大口13131321
+expect_text: 請輸入正確的地區號和手機號
+description: 超长格式大陆手机号+正确密码登录失败","15683","TC_LOGIN_018 - 超长格式大陆手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_031
+source_case: Py_Hopetrip_31
+area_code: +86
+phone: 18502160291
+expect_text: 登入成功
+description: 大陆手机号+正确密码登录成功","15685","TC_LOGIN_031 - 大陆手机号+正确密码登录成功","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_019
+source_case: Py_Hopetrip_19
+area_code: +853
+phone: 652
+expect_text: 請輸入正確的地區號和手機號
+description: 超短格式澳门手机号+正确密码登录失败","15679","TC_LOGIN_019 - 超短格式澳门手机号+正确密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_026
+source_case: Py_Hopetrip_26
+area_code: +886
+phone: 
+expect_text: 請輸入正確的地區號和手機號
+description: 空台湾区号手机号加密码登录失败","15619","TC_LOGIN_026 - 空台湾区号手机号加密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
+"case_id: TC_LOGIN_002
+source_case: Py_Hopetrip_2
+area_code: +852
+phone: 96526666
+expect_text: 登入失敗，手機號/密碼錯誤
+description: 香港手机号+错误密码登录失败","15676","TC_LOGIN_002 - 香港手机号+错误密码登录失败","test_case","2026-08-20","passed","2026-08-20","TestLogin","test_login","",""
