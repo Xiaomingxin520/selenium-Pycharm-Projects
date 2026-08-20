@@ -152,7 +152,7 @@ def send_wecom_notification(start_time: datetime.datetime) -> None:
         f"> ** 结果**：通过 {passed_count} 条 / 失败 {failed_count} 条\n"
         f"> ** 耗时**：{duration} 秒\n\n"
         f"###  失败详情\n"
-        f"{fail_details if failed_count > 0 else '🎉 全部通过'}"
+        f"{fail_details if failed_count > 0 else '全部通过'}"
     )
 
     try:
