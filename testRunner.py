@@ -207,6 +207,7 @@ def run_tests() -> Path:
 
     # 持久化历史数据
     persist_history_from_html()
+
     # 定制报告标题
     customize_allure_report()
 

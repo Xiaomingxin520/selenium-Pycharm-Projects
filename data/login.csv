@@ -28,7 +28,7 @@ TC_LOGIN_026,Py_Hopetrip_26,password,+886,,123456,FALSE,空台湾区号手机号
 TC_LOGIN_027,Py_Hopetrip_27,password,+886,,,FALSE,空台湾区号手机号和密码登录失败,請輸入正確的地區號和手機號
 TC_LOGIN_028,Py_Hopetrip_28,password,+886,jfiwenijewjfeiwojfeiow点击双击大口大口13131321,123456,FALSE,超长格式台湾手机号+正确密码登录失败,請輸入正確的地區號和手機號
 TC_LOGIN_029,Py_Hopetrip_29,password,+886,0900,123456,FALSE,超短格式台湾手机号+正确密码登录失败,請輸入正確的地區號和手機號
-TC_LOGIN_030,Py_Hopetrip_30,password,+886,18502160291,123456,FALSE,错误区号手机号+正确密码登录失败,請輸入正確的地區號和手機號
+TC_LOGIN_030,Py_Hopetrip_30,password,+886,18502160291,123456,FALSE,错误区号手机号+正确密码登录失败,登入賬號錯誤
 TC_LOGIN_031,Py_Hopetrip_31,password,+86,18502160291,123456,TRUE,大陆手机号+正确密码登录成功,登入成功
 TC_LOGIN_032,Py_Hopetrip_32,password,+86,18502160291,654321,FALSE,大陆手机号+错误密码登录失败,登入失敗，手機號/密碼錯誤
 TC_LOGIN_033,Py_Hopetrip_33,password,+86,18502160291,,FALSE,大陆手机号+空密码登录失败,請輸入密碼
@@ -38,4 +38,4 @@ TC_LOGIN_036,Py_Hopetrip_36,password,+86,,123456,FALSE,空大陆区号手机号�
 TC_LOGIN_037,Py_Hopetrip_37,password,+86,,,FALSE,空大陆区号手机号和密码登录失败,請輸入正確的地區號和手機號
 TC_LOGIN_038,Py_Hopetrip_38,password,+86,jfiwenijewjfeiwojfeiow点击双击大口大口13131321,123456,FALSE,超长格式大陆手机号+正确密码登录失败,請輸入正確的地區號和手機號
 TC_LOGIN_039,Py_Hopetrip_39,password,+86,185,123456,FALSE,超短格式大陆手机号+正确密码登录失败,請輸入正確的地區號和手機號
-TC_LOGIN_040,Py_Hopetrip_40,password,+86,0900188188,123456,FALSE,错误区号手机号+正确密码登录失败,登入賬號錯誤
+TC_LOGIN_040,Py_Hopetrip_40,password,+86,0900188188,123456,FALSE,错误区号手机号+正确密码登录失败,請輸入正確的地區號和手機號

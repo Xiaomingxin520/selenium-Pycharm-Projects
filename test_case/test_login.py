@@ -100,7 +100,7 @@ class TestLogin:
         使用 Chrome 浏览器，非无头模式便于调试
         """
         chrome_options = Options()
-        # chrome_options.add_argument('--headless')  # 调试时可关闭无头模式
+        chrome_options.add_argument('--headless')  # 调试时可关闭无头模式
         chrome_options.add_argument('--window-size=1920,1080')
 
         self.driver = webdriver.Chrome(options=chrome_options)
