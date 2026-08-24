@@ -100,7 +100,7 @@ class TestLogin:
         使用 Chrome 浏览器，非无头模式便于调试
         """
         chrome_options = Options()
-        chrome_options.add_argument('--headless')  # 调试时可关闭无头模式
+        # chrome_options.add_argument('--headless')  # 调试时可关闭无头模式
         chrome_options.add_argument('--window-size=1920,1080')
 
         self.driver = webdriver.Chrome(options=chrome_options)
@@ -109,18 +109,19 @@ class TestLogin:
 
     @pytest.mark.parametrize(
         "area_code,phone,pwd,expect_text,case_id,source_case,expect_success,description",
-        LOGIN_DATA
+        LOGIN_DATA,
+        ids=[case[4] for case in LOGIN_DATA]  # ✅ 用下标
     )
     def test_login(
-        self,
-        area_code,
-        phone,
-        pwd,
-        expect_text,
-        case_id,
-        source_case,
-        expect_success,
-        description
+            self,
+            area_code,
+            phone,
+            pwd,
+            expect_text,
+            case_id,
+            source_case,
+            expect_success,
+            description
     ):
         """
         密码登录场景测试用例（支持多区号）

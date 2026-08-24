@@ -74,14 +74,6 @@ def customize_allure_report() -> None:
         data["reportName"] = f"{PROJECT_NAME} 自动化测试报告"
         summary_json.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
-def run_pytest(raw_dir: Path) -> int:
-    """执行 pytest 测试用例，并生成 Allure 原始数据"""
-    return pytest.main([
-        TEST_CASE_DIR,
-        f"--alluredir={raw_dir}",
-        "--clean-alluredir"
-    ])
-
 def generate_allure_html(raw_dir: Path) -> None:
     """根据 Allure 原始数据生成 HTML 报告"""
     subprocess.run(
@@ -197,7 +189,12 @@ def run_tests() -> Path:
     copy_history_to_raw(raw_dir)
 
     print("\n正在执行 pytest 用例...")
-    pytest.main([TEST_CASE_DIR, f"--alluredir={raw_dir}", "--clean-alluredir"])
+    pytest.main([
+        TEST_CASE_DIR,
+        f"--alluredir={raw_dir}",
+        "--clean-alluredir",
+        "-v"  # ✅ 必须加，sugar 才能生效
+    ])
 
     # 写入环境信息
     create_environment_properties(raw_dir)
@@ -211,8 +208,8 @@ def run_tests() -> Path:
     # 定制报告标题
     customize_allure_report()
 
-    print("\n正在发送企微通知...")
-    send_wecom_notification(start_time)
+    # print("\n正在发送企微通知...")
+    # send_wecom_notification(start_time)
 
     # 后台启动 Allure 服务
     launch_allure_server_background(raw_dir)
