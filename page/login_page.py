@@ -123,7 +123,7 @@ class LoginPage:
         self._wait_visible(self.LOGIN_MODAL_TITLE)
 
     # ✅新增
-    # ================= 页面操作：模拟真人敲键盘事件（对抗 AntD） =================
+    # # ================= 页面操作：模拟真人敲键盘事件（对抗 AntD） =================
     def select_area_code(self, target_code="+86"):
         """
         键盘流选择区号（基于默认+852的顺序）
@@ -136,6 +136,22 @@ class LoginPage:
 
             self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".ant-select-dropdown")))
             time.sleep(0.3)
+
+            # ========== ✅ 新增：重置区号为 +852（默认） ==========
+            # 用 JS 找到 +852 对应的 option 并点击，确保起点一致
+            reset_js = """
+                var options = document.querySelectorAll('.ant-select-item-option');
+                for (var i = 0; i < options.length; i++) {
+                    var text = options[i].textContent.trim();
+                    if (text.indexOf('+852') !== -1) {
+                        options[i].click();
+                        break;
+                    }
+                }
+            """
+            self.driver.execute_script(reset_js)
+            time.sleep(0.3)  # 等重置生效
+            # ===================================================
 
             # 标准化区号格式
             target_code_str = str(target_code).strip()

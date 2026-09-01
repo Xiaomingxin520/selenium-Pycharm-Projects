@@ -1,0 +1,150 @@
+{
+  "passed": [
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_001]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_002]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_003]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_004]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_005]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_006]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_007]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_008]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_009]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_010]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_011]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_012]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_013]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_014]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_015]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_016]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_017]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_018]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_019]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_020]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_021]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_022]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_023]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_024]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_025]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_026]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_027]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_028]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_029]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_030]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_031]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_032]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_033]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_034]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_035]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    },
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_036]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    }
+  ],
+  "failed": [],
+  "exit_code": 0
+}
