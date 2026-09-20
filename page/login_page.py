@@ -125,54 +125,37 @@ class LoginPage:
     # ✅新增
     # # ================= 页面操作：模拟真人敲键盘事件（对抗 AntD） =================
     def select_area_code(self, target_code="+86"):
-        """
-        键盘流选择区号（基于默认+852的顺序）
-        +852(默认) -> ↑:+86 | ↓:+853 | ↓↓:+886
-        """
+        """加固版：保留键盘流，增加 JS 聚焦与结果校验，适配仅 +86 场景"""
         try:
-            container = self._wait_clickable(self.AREA_CODE_CONTAINER)
-            self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", container)
-            container.click()
-
-            self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".ant-select-dropdown")))
-            time.sleep(0.3)
-
-            # ========== ✅ 新增：重置区号为 +852（默认） ==========
-            # 用 JS 找到 +852 对应的 option 并点击，确保起点一致
-            reset_js = """
-                var options = document.querySelectorAll('.ant-select-item-option');
-                for (var i = 0; i < options.length; i++) {
-                    var text = options[i].textContent.trim();
-                    if (text.indexOf('+852') !== -1) {
-                        options[i].click();
-                        break;
-                    }
-                }
-            """
-            self.driver.execute_script(reset_js)
-            time.sleep(0.3)  # 等重置生效
-            # ===================================================
-
-            # 标准化区号格式
+            # 标准化区号
             target_code_str = str(target_code).strip()
             if not target_code_str.startswith("+"):
                 target_code_str = f"+{target_code_str}"
 
-            actions = ActionChains(self.driver).move_to_element(container).click()
+            # 1. 定位并聚焦容器（JS 保证不遮挡）
+            container = self._wait_clickable(self.AREA_CODE_CONTAINER)
+            self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", container)
+            self.driver.execute_script("arguments[0].focus();", container)
+            container.click()
 
+            # 2. 等待下拉框渲染
+            dropdown = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".ant-select-dropdown")))
+            time.sleep(0.2)  # 仅留极短动画缓冲
+
+            # 3. 智能键盘流（对抗 AntD）
+            actions = ActionChains(self.driver)
             if target_code_str == "+86":
-                actions.send_keys(Keys.ARROW_UP)
-            elif target_code_str == "+853":
-                actions.send_keys(Keys.ARROW_DOWN)
-            elif target_code_str == "+886":
-                actions.send_keys(Keys.ARROW_DOWN).send_keys(Keys.ARROW_DOWN)
 
-            actions.send_keys(Keys.ENTER).perform()
-            print(f"✅ 键盘操作选择区号: {target_code_str} 成功")
+                actions.send_keys(Keys.ARROW_UP).send_keys(Keys.ENTER).perform() #未来支持多个区号时，开启
+
+            # 4. 关键：结果强校验（解决“看起来点了但没生效”）
+            self.wait.until(lambda d: container.get_attribute('title') == target_code_str or
+                                      container.text == target_code_str)
+            print(f"✅ 区号 {target_code_str} 选择成功")
             return True
 
         except Exception as e:
-            print(f"❌ 键盘选择区号失败: {e}")
+            print(f"❌ 区号选择失败: {e}")
             return False
 
     def enter_mobile(self, mobile):

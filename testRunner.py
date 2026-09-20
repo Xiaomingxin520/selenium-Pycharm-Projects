@@ -11,7 +11,7 @@ import requests
 import pytest
 
 # ====================== 全局常量 ======================
-PROJECT_NAME = "港版PC端登录自动化测试"   # 项目名称，用于报告标题和企微通知
+PROJECT_NAME = "港版PC手机+邮箱登录自动化测试"   # 项目名称，用于报告标题和企微通知
 REPORT_HTML_DIR = Path("reports/html")   # 最终生成的 Allure HTML 报告固定目录
 REPORT_HISTORY_DIR = Path("reports/allure-history/history")   # Allure 历史趋势数据目录，用于保留历史执行记录
 RESULT_JSON = Path("reports/test_result.json")   # pytest 执行后生成的测试结果 JSON 文件
@@ -208,8 +208,8 @@ def run_tests() -> Path:
     # 定制报告标题
     customize_allure_report()
 
-    print("\n正在发送企微通知...")
-    send_wecom_notification(start_time)
+    # print("\n正在发送企微通知...")
+    # send_wecom_notification(start_time)
 
     # 后台启动 Allure 服务
     launch_allure_server_background(raw_dir)
