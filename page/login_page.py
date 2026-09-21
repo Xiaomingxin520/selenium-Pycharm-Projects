@@ -28,9 +28,19 @@ class LoginPage:
     # 区号另外选择
     # TARGET_AREA_CODE_OPTION = (By.XPATH,"//div[@class='ant-select-item-option-content']")
 
-    # 输入账号场景
+    # 输入手机号账号场景
     MOBILE_INPUT = (By.XPATH,'//input[@placeholder="請輸入手機號" or @placeholder="请输入手机号" or @placeholder="請輸入手機號碼"]')
+
+    # 邮箱 Tab 切换（从"手機號碼"切到"電子郵箱"）
+    EMAIL_TAB = (By.CSS_SELECTOR, 'div[data-testid="login-tab-email"]')
+
+    # 输入电邮账号场景
+    EMAIL_INPUT = (By.XPATH,'//input[@placeholder="請輸入電郵賬號" or @placeholder="请输入电邮账号" or @placeholder="請輸入電郵"]')
+
+    # 密码（通用，只保留一个）
     PASSWORD_INPUT = (By.XPATH, '//input[@placeholder="請輸入密碼" or @placeholder="请输入密码"]')
+
+    # 登录按钮（通用，只保留一个）
     LOGIN_BUTTON = (By.CSS_SELECTOR, 'button[data-testid="login-btn-submit"]') # 推荐用 data-testid定位属性登入按钮
 
     # ✅新增
@@ -125,38 +135,38 @@ class LoginPage:
     # ✅新增
     # # ================= 页面操作：模拟真人敲键盘事件（对抗 AntD） =================
     def select_area_code(self, target_code="+86"):
-        """加固版：保留键盘流，增加 JS 聚焦与结果校验，适配仅 +86 场景"""
+        """
+        键盘流选择区号（基于默认+852的顺序）
+        +852(默认) -> ↑:+86 | ↓:+853 | ↓↓:+886
+        """
         try:
-            # 标准化区号
+            container = self._wait_clickable(self.AREA_CODE_CONTAINER)
+            self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", container)
+            container.click()
+
+            self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".ant-select-dropdown")))
+            time.sleep(0.3)
+
+            # 标准化区号格式
             target_code_str = str(target_code).strip()
             if not target_code_str.startswith("+"):
                 target_code_str = f"+{target_code_str}"
 
-            # 1. 定位并聚焦容器（JS 保证不遮挡）
-            container = self._wait_clickable(self.AREA_CODE_CONTAINER)
-            self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", container)
-            self.driver.execute_script("arguments[0].focus();", container)
-            container.click()
+            actions = ActionChains(self.driver).move_to_element(container).click()
 
-            # 2. 等待下拉框渲染
-            dropdown = self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".ant-select-dropdown")))
-            time.sleep(0.2)  # 仅留极短动画缓冲
-
-            # 3. 智能键盘流（对抗 AntD）
-            actions = ActionChains(self.driver)
             if target_code_str == "+86":
+                actions.send_keys(Keys.ARROW_UP)
+            elif target_code_str == "+853":
+                actions.send_keys(Keys.ARROW_DOWN)
 
-                actions.send_keys(Keys.ARROW_UP).send_keys(Keys.ENTER).perform() #未来支持多个区号时，开启
-
-            # 4. 关键：结果强校验（解决“看起来点了但没生效”）
-            self.wait.until(lambda d: container.get_attribute('title') == target_code_str or
-                                      container.text == target_code_str)
-            print(f"✅ 区号 {target_code_str} 选择成功")
+            actions.send_keys(Keys.ENTER).perform()
+            print(f"✅ 键盘操作选择区号: {target_code_str} 成功")
             return True
 
         except Exception as e:
-            print(f"❌ 区号选择失败: {e}")
+            print(f"❌ 键盘选择区号失败: {e}")
             return False
+
 
     def enter_mobile(self, mobile):
         """
@@ -183,6 +193,33 @@ class LoginPage:
         except Exception as e:
             print(f"❌ 输入密码失败: {e}")
             raise e
+
+        # ================= 邮箱登录操作 =================
+        def switch_to_email_tab(self):
+            """
+            切换到邮箱登录 Tab
+            """
+            try:
+                tab = self._wait_clickable(self.EMAIL_TAB)
+                tab.click()
+                time.sleep(0.3)  # 等 Tab 切换动画
+                print("✅ 已切换到邮箱登录 Tab")
+            except Exception as e:
+                print(f"❌ 切换邮箱 Tab 失败: {e}")
+                raise e
+
+        def enter_email(self, email):
+            """
+            输入邮箱地址（纯输入，无区号复杂度）
+            """
+            try:
+                email_input = self._wait_visible(self.EMAIL_INPUT)
+                email_input.clear()
+                email_input.send_keys(email)
+                print(f"✅ 成功输入邮箱: {email}")
+            except Exception as e:
+                print(f"❌ 输入邮箱失败: {e}")
+                raise e
 
     # ✅新增
     def check_agreement(self):
@@ -283,6 +320,17 @@ class LoginPage:
         self.enter_password(password)  #输入密码
         self.check_agreement()    #✅登录前直接勾选协议，避免触发温馨提示弹窗
         self.click_login_button()  #登入按钮
+
+    def login_via_email(self, email, password):
+        """
+        邮箱登录完整流程：切Tab -> 输邮箱 -> 输密码 -> 勾协议 -> 点击登录
+        """
+        self.click_login_register()  # 打开登录弹窗
+        self.switch_to_email_tab()  # 切到邮箱 Tab
+        self.enter_email(email)  # 输入邮箱
+        self.enter_password(password)  # 输入密码
+        self.check_agreement()  # 勾选协议（复用）
+        self.click_login_button()  # 点击登录
 
     def is_login_modal_visible(self):
         """

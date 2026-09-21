@@ -54,6 +54,7 @@ def load_login_csv_data():
             login_type = normalize_csv_value(row.get('login_type', ''))
             area_code = normalize_csv_value(row.get('area_code', ''))
             phone = normalize_csv_value(row.get('phone', ''))
+            email = normalize_csv_value(row.get('email', ''))
             pwd = normalize_csv_value(row.get('pwd', ''))
             expect_success = normalize_csv_value(row.get('expect_success', ''))
             expect_text = normalize_csv_value(row.get('expect_text', ''))
@@ -80,7 +81,8 @@ def load_login_csv_data():
                     case_id,
                     source_case,
                     expect_success,
-                    description
+                    description,
+                    email,
                 )
             )
 
@@ -100,7 +102,7 @@ class TestLogin:
         使用 Chrome 浏览器，非无头模式便于调试
         """
         chrome_options = Options()
-        chrome_options.add_argument('--headless')  # 调试时可关闭无头模式
+        # chrome_options.add_argument('--headless')  # 调试时可关闭无头模式
         chrome_options.add_argument('--window-size=1920,1080')
 
         self.driver = webdriver.Chrome(options=chrome_options)
@@ -108,7 +110,7 @@ class TestLogin:
         time.sleep(2)  # 等待页面初步加载完成
 
     @pytest.mark.parametrize(
-        "area_code,phone,pwd,expect_text,case_id,source_case,expect_success,description",
+        "area_code,phone,pwd,expect_text,case_id,source_case,expect_success,description,email",
         LOGIN_DATA,
         ids=[case[4] for case in LOGIN_DATA]  # ✅ 用下标
     )
@@ -121,7 +123,8 @@ class TestLogin:
             case_id,
             source_case,
             expect_success,
-            description
+            description,
+            email,
     ):
         """
         密码登录场景测试用例（支持多区号）
@@ -136,6 +139,7 @@ class TestLogin:
             f'source_case: {source_case}\n'
             f'area_code: {area_code}\n'
             f'phone: {phone}\n'
+            f'email: {email}\n'
             f'expect_text: {expect_text}\n'
             f'description: {description}'
         )
@@ -150,6 +154,7 @@ class TestLogin:
                     self.driver,
                     phone=phone,
                     password=pwd,
+                    email=email,
                     area_code=area_code
                 )
 

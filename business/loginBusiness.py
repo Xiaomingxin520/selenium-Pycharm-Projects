@@ -3,37 +3,44 @@ import time
 class LoginBusiness:
 
     @staticmethod
-    def loginBusiness(driver, phone, password, area_code="+86"):
+    def loginBusiness(driver, phone="", password="", email="", area_code="+86"):
         """
-        登录业务封装（仅密码登录）
+        统一登录业务封装（支持手机号和邮箱）
         :param driver: selenium driver 实例
-        :param phone: 手机号（CSV 中可能为 <null> 或带空格的字符串）
-        :param password: 密码（CSV 中可能为 <null>）
+        :param phone: 手机号（CSV 中可能为 <null> 或空字符串）
+        :param password: 密码
+        :param email: 邮箱地址（为空则走手机号登录）
         :param area_code: 区号，如 "+86", "+852"
         """
         page = LoginPage(driver)
 
-        # 1. 打开登录弹窗
-        page.click_login_register()
+        # ===== 判断登录方式 =====
+        if email and str(email).strip() not in ["<null>", "", "None"]:
+            # ========== 邮箱登录 ==========
+            page.click_login_register()  # 1. 打开登录弹窗
+            page.switch_to_email_tab()  # 2. 切到邮箱 Tab
+            page.enter_email(str(email).strip())  # 3. 输入邮箱
 
-        # 2.精准控制区号切换时机
-        if area_code:
-            page.select_area_code(area_code)
+            if password and str(password).strip() not in ["<null>", ""]:
+                page.enter_password(str(password).strip())  # 4. 输入密码
 
-        # 3. 输入手机号（兼容 CSV 中的 <null> 或空字符串）
-        if phone and str(phone).strip() not in ["<null>", ""]:
-            page.enter_mobile(str(phone).strip())  # 空手机号：不输入，直接提交触发前端校验
+            page.check_agreement()  # 5. 勾选协议
+            time.sleep(1)
+            page.click_login_button()  # 6. 点击登录
 
-        # 4. 输入密码（兼容 CSV 中的 <null>）
-        if password and str(password).strip() not in ["<null>", ""]:
-            page.enter_password(str(password).strip())  # 空密码：不输入，直接提交触发前端校验
+        else:
+            # ========== 手机号登录（原有逻辑） ==========
+            page.click_login_register()  # 1. 打开登录弹窗
 
-        # 5. 输入完信息后，直接勾选协议,这样后续点击登录时，就不会触发“温馨提示”弹窗了
-        page.check_agreement()
-        time.sleep(1)  # 稍微等待一下 UI 渲染和状态同步
+            if area_code:  # 2. 区号选择
+                page.select_area_code(area_code)
 
-        # 6. 点击登录（未勾选协议时会触发温馨提示弹窗）
-        page.click_login_button()
+            if phone and str(phone).strip() not in ["<null>", ""]:
+                page.enter_mobile(str(phone).strip())  # 3. 输入手机号
 
-        # 后续可接登录成功断言
-        # assert page.is_login_success() is True
+            if password and str(password).strip() not in ["<null>", ""]:
+                page.enter_password(str(password).strip())  # 4. 输入密码
+
+            page.check_agreement()  # 5. 勾选协议
+            time.sleep(1)
+            page.click_login_button()  # 6. 点击登录
