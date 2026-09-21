@@ -112,7 +112,7 @@ class TestLogin:
     @pytest.mark.parametrize(
         "area_code,phone,pwd,expect_text,case_id,source_case,expect_success,description,email",
         LOGIN_DATA,
-        ids=[case[4] for case in LOGIN_DATA]  # ✅ 用下标
+        ids=[case[4] for case in LOGIN_DATA]  #
     )
     def test_login(
             self,

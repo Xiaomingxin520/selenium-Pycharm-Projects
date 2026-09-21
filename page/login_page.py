@@ -47,7 +47,7 @@ class LoginPage:
     # 精准定位：直接锁定 input 标签的 data-testid
     AGREEMENT_CHECKBOX_INPUT = (By.CSS_SELECTOR, "input[data-testid='login-checkbox-agreement']")
 
-    # 备用定位：定位整个可点击的 label 容器（如果 JS 失效，可用此元素进行常规点击）
+    # 备用可选定位：定位整个可点击的 label 容器（如果 JS 失效，可用此元素进行常规点击）
     # AGREEMENT_CHECKBOX_LABEL = (By.CSS_SELECTOR, "label.ant-checkbox-wrapper[data-testid='login-checkbox-agreement']")
 
     # 登录成功/失败相关，可按实际再调整

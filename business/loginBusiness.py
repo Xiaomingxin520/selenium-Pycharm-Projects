@@ -5,7 +5,7 @@ class LoginBusiness:
     @staticmethod
     def loginBusiness(driver, phone="", password="", email="", area_code="+86"):
         """
-        统一登录业务封装（支持手机号和邮箱）
+        统一登录业务封装（支持手机号和邮箱号）
         :param driver: selenium driver 实例
         :param phone: 手机号（CSV 中可能为 <null> 或空字符串）
         :param password: 密码
