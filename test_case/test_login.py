@@ -96,18 +96,14 @@ LOGIN_DATA = load_login_csv_data()
 @allure.feature('登录模块')
 class TestLogin:
 
-    def setup_method(self):
-        """
-        每个测试用例执行前：启动浏览器并打开测试地址
-        使用 Chrome 浏览器，非无头模式便于调试
-        """
-        chrome_options = Options()
-        # chrome_options.add_argument('--headless')  # 调试时可关闭无头模式
-        chrome_options.add_argument('--window-size=1920,1080')
+    @pytest.fixture(autouse=True)
+    def setup(self, driver):
+        self.driver = driver
+        self.login_page = LoginPage(driver)
 
-        self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.get('https://www.testhopetrip.dabapiao.com/')
-        time.sleep(2)  # 等待页面初步加载完成
+    def open_home(self, driver):  # driver 由 conftest.py 提供
+        driver.get("https://www.testhopetrip.dabapiao.com/")
+        # 后续测试逻辑...
 
     @pytest.mark.parametrize(
         "area_code,phone,pwd,expect_text,case_id,source_case,expect_success,description,email",
@@ -208,6 +204,6 @@ class TestLogin:
 
     def teardown_method(self):
         """
-        每个测试用例执行后：关闭浏览器，释放资源
+        driver 生命周期由 conftest.py 管理，这里不再 quit
         """
-        self.driver.quit()
+        pass

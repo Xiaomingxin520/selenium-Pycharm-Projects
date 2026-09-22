@@ -189,12 +189,21 @@ def run_tests() -> Path:
     copy_history_to_raw(raw_dir)
 
     print("\n正在执行 pytest 用例...")
-    pytest.main([
+
+    # ✅ 无头模式开关（False=有头调试，True=无头CI）
+    HEADLESS = False
+
+    pytest_args = [
         TEST_CASE_DIR,
         f"--alluredir={raw_dir}",
         "--clean-alluredir",
-        "-v"  # ✅ 必须加，sugar 才能生效
-    ])
+        "-v"
+    ]
+
+    if HEADLESS:
+        pytest_args.append("--headless")
+
+    pytest.main(pytest_args)
 
     # 写入环境信息
     create_environment_properties(raw_dir)

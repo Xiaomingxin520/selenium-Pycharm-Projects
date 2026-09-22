@@ -30,18 +30,14 @@ class LoginPage:
 
     # 输入手机号账号场景
     MOBILE_INPUT = (By.XPATH,'//input[@placeholder="請輸入手機號" or @placeholder="请输入手机号" or @placeholder="請輸入手機號碼"]')
-
-    # 邮箱 Tab 切换（从"手機號碼"切到"電子郵箱"）
-    EMAIL_TAB = (By.CSS_SELECTOR, 'div[data-testid="login-tab-email"]')
+    PASSWORD_INPUT = (By.XPATH, '//input[@placeholder="請輸入密碼" or @placeholder="请输入密码"]')
+    LOGIN_BUTTON = (By.CSS_SELECTOR, 'button[data-testid="login-btn-submit"]') # 推荐用 data-testid定位属性登入按钮
 
     # 输入电邮账号场景
-    EMAIL_INPUT = (By.XPATH,'//input[@placeholder="請輸入電郵賬號" or @placeholder="请输入电邮账号" or @placeholder="請輸入電郵"]')
-
-    # 密码（通用，只保留一个）
-    PASSWORD_INPUT = (By.XPATH, '//input[@placeholder="請輸入密碼" or @placeholder="请输入密码"]')
-
-    # 登录按钮（通用，只保留一个）
-    LOGIN_BUTTON = (By.CSS_SELECTOR, 'button[data-testid="login-btn-submit"]') # 推荐用 data-testid定位属性登入按钮
+    LOGIN_TAB_EMAIL = (By.CSS_SELECTOR, '[data-testid="login-tab-email"]')
+    EMAIL_INPUT = (By.XPATH, '//input[@placeholder="請輸入電子郵箱賬號" or @placeholder="请输入电子邮箱账号" or contains(@placeholder,"邮箱")]')
+    PASSWORD_INPUT1 = (By.CSS_SELECTOR, 'input[placeholder*="密碼"]')  # 如果之前没加密码框也一并补上
+    LOGIN_BUTTON1 = (By.CSS_SELECTOR, 'button[data-testid="login-btn-submit"]') # 推荐用 data-testid定位属性登入按钮
 
     # ✅新增
     # 精准定位：直接锁定 input 标签的 data-testid
@@ -195,12 +191,12 @@ class LoginPage:
             raise e
 
         # ================= 邮箱登录操作 =================
-        def switch_to_email_tab(self):
+    def switch_to_email_tab(self):
             """
             切换到邮箱登录 Tab
             """
             try:
-                tab = self._wait_clickable(self.EMAIL_TAB)
+                tab = self._wait_clickable(self.LOGIN_TAB_EMAIL)
                 tab.click()
                 time.sleep(0.3)  # 等 Tab 切换动画
                 print("✅ 已切换到邮箱登录 Tab")
@@ -208,7 +204,7 @@ class LoginPage:
                 print(f"❌ 切换邮箱 Tab 失败: {e}")
                 raise e
 
-        def enter_email(self, email):
+    def enter_email(self, email):
             """
             输入邮箱地址（纯输入，无区号复杂度）
             """

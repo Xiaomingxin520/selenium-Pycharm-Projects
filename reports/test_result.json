@@ -1,0 +1,10 @@
+{
+  "passed": [
+    {
+      "name": "test_case/test_login.py::TestLogin::test_login[TC_LOGIN_025]",
+      "display": "密码登录场景测试用例（支持多区号）"
+    }
+  ],
+  "failed": [],
+  "exit_code": 0
+}

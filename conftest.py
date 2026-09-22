@@ -19,9 +19,15 @@ FAILED_CASES = []
 
 # function 级 fixture：每个测试用例单独启动一个 Chrome 浏览器，测试结束后自动 quit，防止进程残留
 @pytest.fixture(scope="function")
-def driver():
+def driver(request):
     # 1. 浏览器启动参数配置
     options = Options()
+    # ✅ 新增：通过命令行参数控制无头模式
+    if request.config.getoption("--headless", default=False):
+        options.add_argument("--headless")
+        options.add_argument("--window-size=1920,1080")
+    else:
+        options.add_argument("--start-maximized")
 
     # ✅ 必须关掉，否则会被检测为 Selenium
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -173,3 +179,11 @@ def _extract_failure_reason(report) -> str:
     lines = str(report.longrepr).strip().split("\n")
     # 如果最后一行过长，进行截断
     return lines[-1][:120] + "..." if len(lines[-1]) > 120 else lines[-1]
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--headless",
+        action="store_true",
+        default=False,
+        help="启用无头模式（CI 使用）"
+    )
