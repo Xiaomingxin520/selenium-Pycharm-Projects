@@ -22,7 +22,7 @@ def test_bus_search_default(driver):
         to_city="香港",
         to_station="旺角朗豪坊",
         date_offset=2,
-        need_login=False  # 当前登录用例独立，大巴票默认不登录直接查
+        need_login=False  #当前登录用例独立，大巴票默认不登录直接查
     )
     assert result is True, "大巴票查询结果页未成功加载（班次/查询结果标识未出现）"
 
