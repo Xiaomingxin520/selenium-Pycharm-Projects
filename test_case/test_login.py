@@ -10,13 +10,11 @@ import pytest
 import time
 import csv
 import allure
-from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
 
 from page.login_page import LoginPage
-from business.loginBusiness import LoginBusiness
+from business.login_business import LoginBusiness
 
 
 # CSV 文件路径：存放登录测试数据的文件
@@ -144,7 +142,20 @@ class TestLogin:
         timestamp = time.strftime('%Y%m%d%H%M%S')
 
         with allure.step('执行登录操作'):
+
             try:
+
+                # ===== 判断登录方式 =====
+                email_valid = email and str(email).strip() not in ['', '<null>', 'None']
+                phone_valid = phone and str(phone).strip() not in ['', '<null>', 'None']
+
+                if email_valid:
+                    login_mode = "email"
+                elif phone_valid:
+                    login_mode = "auto"  # 有手机 → 走手机
+                else:
+                    login_mode = "email"  # 都空 → 用例29/30强制走邮箱
+
                 # 调用 Business 层执行登录流程
                 LoginBusiness.loginBusiness(
                     self.driver,
