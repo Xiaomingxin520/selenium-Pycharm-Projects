@@ -1,4 +1,4 @@
-from page.bus_ticket_page import BusTicketPage
+from page.busticket_page import BusTicketPage
 from business.login_business import LoginBusiness  # 已按重命名后的登录模块导入
 from selenium.webdriver.chrome.webdriver import WebDriver
 
