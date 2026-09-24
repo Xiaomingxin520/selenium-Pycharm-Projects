@@ -3,8 +3,10 @@
 # 1. 提供全局 pytest fixture
 # 2. 每个测试用例独立启动/关闭浏览器
 # 3. 统一浏览器配置、隐式等待、driver 生命周期管理
+#✅ 新增：本地运行 pytest 一切照旧，只新增预设3个环境变量入口，往后有需求接Jenkins直接设变量即可。
 
 import json
+import os  # ✅ 已修改：新增 os 导入（原文件未导入）
 import pytest
 from pathlib import Path
 from selenium import webdriver
@@ -22,8 +24,12 @@ FAILED_CASES = []
 def driver(request):
     # 1. 浏览器启动参数配置
     options = Options()
-    # ✅ 新增：通过命令行参数控制无头模式
-    if request.config.getoption("--headless", default=False):
+    # ✅ 已修改：支持命令行参数 + 环境变量双重控制无头模式
+    _headless = (
+        request.config.getoption("--headless", default=False)
+        or os.getenv("HEADLESS", "false").lower() == "true"
+    )
+    if _headless:
         options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
     else:
@@ -59,8 +65,9 @@ def driver(request):
     options.add_experimental_option("useAutomationExtension", False)
 
     # 2. 启动 ChromeDriver
-    # 指定本地 ChromeDriver 路径
-    service = Service(r"D:\Chromedriver\chromedriver.exe")
+    # ✅ 已修改：支持环境变量指定驱动路径，CI 环境设 CHROMEDRIVER_PATH，本地不设置则走默认
+    _driver_path = os.getenv("CHROMEDRIVER_PATH", r"D:\Chromedriver\chromedriver.exe")
+    service = Service(_driver_path)
     # 实例化 Chrome 浏览器对象
     driver = webdriver.Chrome(service=service, options=options)
 
@@ -77,7 +84,9 @@ def driver(request):
     driver.implicitly_wait(10)
 
     # 3. 全局基础配置：打开测试环境
-    driver.get("https://www.testhopetrip.dabapiao.com/")
+    # ✅ 已修改：支持环境变量配置 BASE_URL，CI 多环境切换
+    _base_url = os.getenv("BASE_URL", "https://www.testhopetrip.dabapiao.com/")
+    driver.get(_base_url)
     # 显式等待（WebDriverWait）为主，隐式等待为辅：设置为 0，避免与 WebDriverWait 叠加造成 ~20s 超时
     driver.implicitly_wait(0)
 
