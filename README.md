@@ -3,7 +3,7 @@
 具备高可维护性与易扩展性。目前已覆盖登录及大巴票核心业务（搜索/下单骨架），支持多环境配置与持续集成。
 
 # 目录结构与框架设计思路
-```Text
+```text
 Python Projects/
 ├── page/               # 页面对象层 (PO模式)：元素定位与基础操作
 │   ├── xxx1_page.py
@@ -25,10 +25,11 @@ Python Projects/
 │   └── xxx2.csv
 │   └── xxx3.csv
 │   └── ....csv
+├── reports/            # 测试报告与日志输出
 ├── conftest.py         # Pytest全局夹具 (Fixture)，管理浏览器生命周期
 ├── pytest.ini          # Pytest运行配置（标记、插件等）
 ├── operateElement.py   # 基础元素操作封装（显式等待、点击输入等）
-├── reports/            # 测试报告与日志输出
+├── Jenkinsfile            # CI/CD流水线定义（无头模式+Allure报告）
 ├── .venv/              # 虚拟环境
 ├── .gitignore          # Git忽略配置（已优化IDE缓存与日志）
 └── README.md
@@ -46,6 +47,7 @@ Python Projects/
 - **Allure / HTML报告**（测试报告生成，可扩展）
 - **CSV**（轻量级数据驱动）
 - **Git**（版本控制，支持多远程仓库备份）
+- **Jenkins**（持续集成，流水线自动触发）
 
 # 框架特性
 - **PO模式**：降低代码冗余，UI变更只需修改页面层。
@@ -53,8 +55,18 @@ Python Projects/
 - **显式等待**：封装健壮的元素交互，应对动态渲染页面（如跨月日历、弹窗）。
 - **多端兼容**：基础架构支持登录、票务等复杂业务扩展。
 - **工程化规范**：已清理IDE缓存（pycache、idea），保持仓库整洁。
+- **CI/CD 预留**：conftest 支持 HEADLESS 环境变量切换，Jenkinsfile 定义完整流水线，本地调试与服务器无头执行无缝切换。
+
+# 持续集成（Jenkins）
+项目根目录包含 `Jenkinsfile`（无后缀），定义声明式流水线：
+- **无头模式**：CI 环境自动设置 `HEADLESS=true`，无需修改业务代码。
+- **依赖安装**：自动执行 `pip install -r requirements.txt`。
+- **测试执行**：运行 `pytest`，结果写入 `reports/allure-results/`。
+- **报告收集**：流水线结束后自动生成 Allure 报告并清理工作空间。
+- **触发方式**：代码推送至 GitLab/GitHub 后，通过 Webhook 自动触发（需 Jenkins 安装 Allure 插件）。
 
 # 快速开始
 1. **环境安装**：`pip install -r requirements.txt`
 2. **执行测试**：`pytest test_case/ -v`
 3. **数据配置**：修改 `data/` 目录下对应 CSV 文件（如登录账号、车票查询条件）。
+4. **CI执行**：推送代码至远程仓库，Jenkins 自动拉取并以无头模式运行。
