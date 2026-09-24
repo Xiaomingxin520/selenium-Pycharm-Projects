@@ -3,7 +3,8 @@
 基于 Selenium WebDriver​ 与 Pytest​ 搭建的 Web UI 自动化测试框架。项目采用经典的 PO (Page Object) 分层设计模式，结合数据驱动（CSV）与业务流封装，
 具备高可维护性与易扩展性。目前已覆盖登录及大巴票核心业务（搜索/下单骨架），支持多环境配置与持续集成。
 
-# 目录结构与框架设计
+### 目录结构与框架设计思路
+```Text
 Python Projects/
 ├── page/               # 页面对象层 (PO模式)：元素定位与基础操作
 │   ├── xxx1_page.py
@@ -25,14 +26,14 @@ Python Projects/
 │   └── xxx2.csv
 │   └── xxx3.csv
 │   └── ....csv
-├── conf/               # 配置层（根目录配置）
-│   ├── conftest.py         # Pytest全局夹具 (Fixture)，管理浏览器生命周期
-│   ├── pytest.ini          # Pytest运行配置（标记、插件等）
-│   └── operateElement.py   # 基础元素操作封装（显式等待、点击输入等）
+├── conftest.py         # Pytest全局夹具 (Fixture)，管理浏览器生命周期
+├── pytest.ini          # Pytest运行配置（标记、插件等）
+├── operateElement.py   # 基础元素操作封装（显式等待、点击输入等）
 ├── reports/            # 测试报告与日志输出
 ├── .venv/              # 虚拟环境
 ├── .gitignore          # Git忽略配置（已优化IDE缓存与日志）
 └── README.md
+```
 
 # 分层架构思想
 页面层 (page)：封装UI元素与基础动作，屏蔽底层定位器变化。
