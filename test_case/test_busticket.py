@@ -14,5 +14,7 @@ def test_bus_select_depart_station(driver):
     # 当前仅传出发地，到达地/日期等后续补全（business层已留好占位）
     biz.enter_bus_and_search(
         depart_city="深圳",
-        depart_station="深圳湾（香港段上）"
+        depart_station="深圳灣（香港段上）",
+        arrive_city="香港",
+        arrive_station="尖沙咀海港城"
     )
