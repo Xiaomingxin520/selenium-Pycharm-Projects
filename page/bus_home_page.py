@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# 常量定义（必须在class外面）
+# 常量定义（须在class外面）
 SHENZHEN_CITY_ID = "133"
 HONGKONG_CITY_ID = "2"
 SHENZHEN_WAN_STATION_ID = "200006"
