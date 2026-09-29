@@ -171,8 +171,7 @@ class BusHomePage:
             header_text = self.driver.find_element(By.XPATH, header_xpath).text.strip()
             print(f"📅 翻月后面板: {header_text}")
 
-        # 3. 精确匹配目标日期（基于图中 td 结构）
-        # 用 title（图中明确有 title="2026-10-01"）
+        # 3. 精确匹配目标日期（基于图中 td 结构）: 用 title（图中明确有 title="2026-10-01"）
         cell_xpath = (
                 dropdown_xpath +
                 f"//td[contains(@class,'ant-picker-cell-in-view') "

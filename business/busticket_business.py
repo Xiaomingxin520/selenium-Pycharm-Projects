@@ -2,8 +2,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from page.bus_home_page import BusHomePage
-import time
-
 
 class BusticketBusiness:
     def __init__(self, driver):
