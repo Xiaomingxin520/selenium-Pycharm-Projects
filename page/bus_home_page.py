@@ -64,12 +64,12 @@ class BusHomePage:
             ))
         self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", arrive_trigger)
         self.driver.execute_script("arguments[0].click();", arrive_trigger)
-        print("✅ 点击到达触发框")
+        print(" 点击到达触发框")
 
         # 2. 等弹窗出现（testid = bus-go-arrive-city-modal，不是触发框！）
         arrive_modal_xpath = "//div[@data-testid='bus-go-arrive-city-modal']"
         self.wait.until(EC.visibility_of_element_located((By.XPATH, arrive_modal_xpath)))
-        print("✅ 找到到达弹窗")
+        print(" 找到到达弹窗")
 
         # 3. 点城市"香港"（在弹窗内找 li[data-city-id='2']）
         city_xpath = (
@@ -80,7 +80,7 @@ class BusHomePage:
         )
         city_el = self.wait.until(EC.element_to_be_clickable((By.XPATH, city_xpath)))
         self.driver.execute_script("arguments[0].click();", city_el)
-        print(f"✅ 选到达城市: {arrive_city}")
+        print(f" 选到达城市: {arrive_city}")
 
         time.sleep(0.5)
 
@@ -93,7 +93,7 @@ class BusHomePage:
         station_el = self.wait.until(EC.presence_of_element_located((By.XPATH, station_xpath)))
         self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", station_el)
         self.driver.execute_script("arguments[0].click();", station_el)
-        print(f"✅ 选完到达: {arrive_city}/{arrive_station}")
+        print(f" 选完到达: {arrive_city}/{arrive_station}")
 
         # ---- 5. 联动刷新判定与 JS 回写 ----
         arrive_display_xpath = "//span[text()='到達城市/站點']/../..//div[contains(@class,'cursor-pointer')]"
@@ -106,16 +106,16 @@ class BusHomePage:
         final_arrive_text = arrive_display.text.strip()
         final_arrive_city_id = arrive_display.get_attribute("data-city-id") or ""
 
-        print(f"🔍 联动后: 出发=[{final_depart_text}](city={final_depart_city_id}), "
+        print(f" 联动后: 出发=[{final_depart_text}](city={final_depart_city_id}), "
               f"到达=[{final_arrive_text}](city={final_arrive_city_id})")
 
         # 到达框校验
-        assert final_arrive_city_id == HONGKONG_CITY_ID, f"❌ 到达框 city-id 异常: {final_arrive_city_id}"
-        assert arrive_city in final_arrive_text and arrive_station in final_arrive_text, f"❌ 到达文本异常: {final_arrive_text}"
+        assert final_arrive_city_id == HONGKONG_CITY_ID, f" 到达框 city-id 异常: {final_arrive_city_id}"
+        assert arrive_city in final_arrive_text and arrive_station in final_arrive_text, f" 到达文本异常: {final_arrive_text}"
 
         # 出发框：城市必为133，站点被刷则JS回写
         if final_depart_city_id != SHENZHEN_CITY_ID or depart_station_keep not in final_depart_text or final_depart_station_id != SHENZHEN_WAN_STATION_ID:
-            print(f"⚠️ 出发站点被联动刷新(当前:{final_depart_text})，执行JS回写")
+            print(f" 出发站点被联动刷新(当前:{final_depart_text})，执行JS回写")
             self.driver.execute_script("document.body.click();")
             time.sleep(0.3)
             self.driver.execute_script(
@@ -129,6 +129,6 @@ class BusHomePage:
         # 最终双校验
         final_depart = self.driver.find_element(By.XPATH, depart_display_xpath).text.strip()
         final_arrive = self.driver.find_element(By.XPATH, arrive_display_xpath).text.strip()
-        assert f"{depart_city_keep}/{depart_station_keep}" in final_depart, f"❌ 出发最终失败: {final_depart}"
-        assert f"{arrive_city}/{arrive_station}" in final_arrive, f"❌ 到达最终失败: {final_arrive}"
-        print(f"✅ select_arrive_city_station 完成: 出发[{final_depart}] -> 到达[{final_arrive}]")
+        assert f"{depart_city_keep}/{depart_station_keep}" in final_depart, f" 出发最终失败: {final_depart}"
+        assert f"{arrive_city}/{arrive_station}" in final_arrive, f" 到达最终失败: {final_arrive}"
+        print(f" select_arrive_city_station 完成: 出发[{final_depart}] -> 到达[{final_arrive}]")
