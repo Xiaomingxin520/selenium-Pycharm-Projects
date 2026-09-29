@@ -8,6 +8,7 @@ class BusticketBusiness:
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
         self.target_date = None  # ← 供 testcase 读取
+        self.bus_home = BusHomePage(self.driver)
 
     def enter_bus_and_search(self, depart_city="深圳", depart_station="深圳灣（香港段上）",
                              arrive_city="香港", arrive_station="尖沙咀海港城"):
@@ -20,12 +21,18 @@ class BusticketBusiness:
         wait.until(EC.visibility_of_element_located((By.XPATH, "//span[text()='出發城市/站點']")))
 
         # 3. 选择出发与到达
-        bus_home = BusHomePage(self.driver)
-        bus_home.select_depart_city_station(depart_city, depart_station)
-        bus_home.select_arrive_city_station(arrive_city, arrive_station)
+        self.bus_home.select_depart_city_station(depart_city, depart_station)
+        self.bus_home.select_arrive_city_station(arrive_city, arrive_station)
 
         # 4. 选择日期（当天+2）
-        self.target_date = bus_home.select_date_two_days_later()
+        self.target_date = self.bus_home.select_date_two_days_later()
 
-        # 后续步骤占位
-        # TODO: 点击立即查询
+        # 5. 新增：立即查詢
+        self.bus_home.click_search_now()
+
+        # 6. 等待结果页
+        self.wait.until(EC.url_contains("date="))
+        current_url = self.driver.current_url
+        assert f"date={self.target_date}" in current_url, \
+            f"结果页URL异常: 期望含 date={self.target_date}, 实际 {current_url}"
+        print(f"✅ 搜索结果页跳转成功: {current_url}")

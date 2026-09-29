@@ -24,4 +24,7 @@ def test_bus_select_depart_station(driver):
     current_url = driver.current_url
     assert f"date={expected_date}" in current_url, \
         f"URL缺少日期参数: 期望 date={expected_date}, 实际 {current_url}"
-    print(f"✅ 日期校验通过: date={expected_date}")
+    print(f" 日期校验通过: date={expected_date}")
+
+    # 立即查询 + 结果页断言
+    print(" 大巴票全链路（城市→日期→查询）闭环完成！")

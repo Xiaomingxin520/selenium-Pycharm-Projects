@@ -17,6 +17,9 @@ DATE_DROPDOWN = "div.ant-picker-dropdown:not(.ant-picker-dropdown-hidden)"
 DATE_CELL = "//td[contains(@class,'ant-picker-cell') and @title='{date}']"
 DATE_SELECTED = "ant-picker-cell-selected"
 
+# 立即查询
+SEARCH_BTN_XPATH = "//*[@data-testid='bus-btn-search']"
+
 class BusHomePage:
     def __init__(self, driver):
         self.driver = driver
@@ -169,7 +172,7 @@ class BusHomePage:
             time.sleep(0.3)  # 等翻月动画
             # 重新读头部（翻月后）
             header_text = self.driver.find_element(By.XPATH, header_xpath).text.strip()
-            print(f"📅 翻月后面板: {header_text}")
+            print(f" 翻月后面板: {header_text}")
 
         # 3. 精确匹配目标日期（基于图中 td 结构）: 用 title（图中明确有 title="2026-10-01"）
         cell_xpath = (
@@ -187,11 +190,32 @@ class BusHomePage:
         self.wait.until(
             EC.invisibility_of_element_located((By.CSS_SELECTOR, DATE_DROPDOWN))
         )
-
-        # 5. 校验已选中（读输入框回显 / URL）
-        selected_value = date_trigger.get_attribute("value") or date_trigger.text
-        assert target_str in selected_value or target_str in self.driver.current_url, \
-            f"日期未选中: 期望 {target_str}, 实际 {selected_value}"
-        print(f"✅ 日期选择完成: {target_str}")
-
+        print(f" 日期选择完成: {target_str}")
         return target_str
+
+    def click_search_now(self):
+        """点击【立即查詢】（基于 testid 定位）"""
+        # 1. 等日期面板彻底关闭
+        try:
+            self.wait.until(
+                EC.invisibility_of_element_located((By.XPATH, "//div[contains(@class,'ant-picker-dropdown')]"))
+            )
+        except TimeoutException:
+            pass
+
+        # 2. 用正确的 testid 定位
+        btn = self.wait.until(EC.presence_of_element_located(
+            (By.XPATH, "//*[@data-testid='bus-btn-search']")
+        ))
+
+        # 3. 滚动到视口中央
+        self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", btn)
+        time.sleep(0.3)
+
+        # 4. JS点击
+        self.driver.execute_script("arguments[0].click();", btn)
+        print(" 点击【立即查詢】完成 (testid=bus-btn-search)")
+
+        # 5. 等待跳转
+        self.wait.until(EC.url_contains("date="))
+        print(f" 已进入结果页: {self.driver.current_url}")
