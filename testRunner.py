@@ -83,7 +83,7 @@ def generate_allure_html(raw_dir: Path) -> None:
     )
 
 # ======================
-# ✅ 企微通知（Text + Markdown，失败详情干净）
+#  企微通知（Text + Markdown，失败详情干净）
 # ======================
 def send_wecom_notification(start_time: datetime.datetime) -> None:
     """发送测试结果到企业微信，包含 Text 保底和 Markdown 详情"""
@@ -190,7 +190,7 @@ def run_tests() -> Path:
 
     print("\n正在执行 pytest 用例...")
 
-    # ✅ 无头模式开关（False=有头调试，True=无头CI）
+    #  无头模式开关（False=有头调试，True=无头CI）
     HEADLESS = False
 
     pytest_args = [

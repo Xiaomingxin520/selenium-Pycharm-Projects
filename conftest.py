@@ -3,7 +3,7 @@
 # 1. 提供全局 pytest fixture
 # 2. 每个测试用例独立启动/关闭浏览器
 # 3. 统一浏览器配置、隐式等待、driver 生命周期管理
-#✅ 新增：本地运行 pytest 一切照旧，只新增预设3个环境变量入口，往后有需求接Jenkins直接设变量即可。
+#  新增：本地运行 pytest 一切照旧，只新增预设3个环境变量入口，往后有需求接Jenkins直接设变量即可。
 
 import json
 import os  # ✅ 已修改：新增 os 导入（原文件未导入）
@@ -13,7 +13,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
-# ✅ 新增：测试结果收集
+#  新增：测试结果收集
 # 用于存储所有通过的用例信息
 PASSED_CASES = []
 # 用于存储所有失败的用例信息
@@ -24,7 +24,7 @@ FAILED_CASES = []
 def driver(request):
     # 1. 浏览器启动参数配置
     options = Options()
-    # ✅ 已修改：支持命令行参数 + 环境变量双重控制无头模式
+    #  已修改：支持命令行参数 + 环境变量双重控制无头模式
     _headless = (
         request.config.getoption("--headless", default=False)
         or os.getenv("HEADLESS", "false").lower() == "true"
@@ -35,16 +35,16 @@ def driver(request):
     else:
         options.add_argument("--start-maximized")
 
-    # ✅ 必须关掉，否则会被检测为 Selenium
+    #  必须关掉，否则会被检测为 Selenium
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option("useAutomationExtension", False)
 
-    # ✅ 禁用沙箱 & GPU（Windows / CI 都稳）
+    #  禁用沙箱 & GPU（Windows / CI 都稳）
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
 
-    # ✅ 防止首次启动慢
+    #  防止首次启动慢
     options.add_argument("--disable-extensions")
     options.add_argument("--disable-background-networking")
 
@@ -65,13 +65,13 @@ def driver(request):
     options.add_experimental_option("useAutomationExtension", False)
 
     # 2. 启动 ChromeDriver
-    # ✅ 已修改：支持环境变量指定驱动路径，CI 环境设 CHROMEDRIVER_PATH，本地不设置则走默认
+    #  已修改：支持环境变量指定驱动路径，CI 环境设 CHROMEDRIVER_PATH，本地不设置则走默认
     _driver_path = os.getenv("CHROMEDRIVER_PATH", r"D:\Chromedriver\chromedriver.exe")
     service = Service(_driver_path)
     # 实例化 Chrome 浏览器对象
     driver = webdriver.Chrome(service=service, options=options)
 
-    # ✅ 抹掉 navigator.webdriver（防反爬）
+    #  抹掉 navigator.webdriver（防反爬）
     # 通过 Chrome DevTools Protocol 注入 JavaScript，覆盖 webdriver 属性
     driver.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument",
@@ -84,7 +84,7 @@ def driver(request):
     driver.implicitly_wait(10)
 
     # 3. 全局基础配置：打开测试环境
-    # ✅ 已修改：支持环境变量配置 BASE_URL，CI 多环境切换
+    #  已修改：支持环境变量配置 BASE_URL，CI 多环境切换
     _base_url = os.getenv("BASE_URL", "https://www.testhopetrip.dabapiao.com/")
     driver.get(_base_url)
     # 显式等待（WebDriverWait）为主，隐式等待为辅：设置为 0，避免与 WebDriverWait 叠加造成 ~20s 超时
@@ -96,7 +96,7 @@ def driver(request):
     # 5. 用例结束，清理资源
     driver.quit()
 
-# ✅ 新增：收集每条用例结果（已优化为中文用例名 + 精简原因）
+#  新增：收集每条用例结果（已优化为中文用例名 + 精简原因）
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     # 获取测试用例的执行结果
@@ -105,7 +105,7 @@ def pytest_runtest_makereport(item, call):
 
     # 只在测试用例执行阶段（call）进行处理
     if report.when == "call":
-        # ✅ 优先用 allure.title，其次用 docstring，最后用 nodeid 提取用例显示名称
+        #  优先用 allure.title，其次用 docstring，最后用 nodeid 提取用例显示名称
         display_name = _extract_display_name(item)
 
         # 判断用例是否通过
@@ -124,7 +124,7 @@ def pytest_runtest_makereport(item, call):
                 "reason": reason            # 失败原因
             })
 
-# ✅ 新增：测试结束后把结果写到一个 JSON 文件（供 testRunner 读取）
+#  新增：测试结束后把结果写到一个 JSON 文件（供 testRunner 读取）
 def pytest_sessionfinish(session, exitstatus):
     # 定义测试结果文件路径
     result_file = Path("reports/test_result.json")
@@ -139,7 +139,7 @@ def pytest_sessionfinish(session, exitstatus):
     }, result_file.open("w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
     # 控制台打印成功写入提示
-    print(f"✅ 测试结果已写入: {result_file}")
+    print(f" 测试结果已写入: {result_file}")
 
 def _extract_display_name(item) -> str:
     """
