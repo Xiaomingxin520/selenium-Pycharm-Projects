@@ -24,7 +24,7 @@ class LoginPage:
     # 区号选择相关（用于点击展开下拉框）
     AREA_CODE_CONTAINER = (By.CSS_SELECTOR, "[data-testid='login-input-area-code']")
 
-    # ✅新增
+    # 新增
     # 区号另外选择
     # TARGET_AREA_CODE_OPTION = (By.XPATH,"//div[@class='ant-select-item-option-content']")
 
@@ -39,7 +39,7 @@ class LoginPage:
     PASSWORD_INPUT1 = (By.CSS_SELECTOR, 'input[placeholder*="密碼"]')  # 如果之前没加密码框也一并补上
     LOGIN_BUTTON1 = (By.CSS_SELECTOR, 'button[data-testid="login-btn-submit"]') # 推荐用 data-testid定位属性登入按钮
 
-    # ✅新增
+    # 新增
     # 精准定位：直接锁定 input 标签的 data-testid
     AGREEMENT_CHECKBOX_INPUT = (By.CSS_SELECTOR, "input[data-testid='login-checkbox-agreement']")
 
@@ -128,7 +128,7 @@ class LoginPage:
         self.click(self.MENU_LOGIN_REGISTER)
         self._wait_visible(self.LOGIN_MODAL_TITLE)
 
-    # ✅新增
+    # 新增
     # # ================= 页面操作：模拟真人敲键盘事件（对抗 AntD） =================
     def select_area_code(self, target_code="+86"):
         """
@@ -156,11 +156,11 @@ class LoginPage:
                 actions.send_keys(Keys.ARROW_DOWN)
 
             actions.send_keys(Keys.ENTER).perform()
-            print(f"✅ 键盘操作选择区号: {target_code_str} 成功")
+            print(f" 键盘操作选择区号: {target_code_str} 成功")
             return True
 
         except Exception as e:
-            print(f"❌ 键盘选择区号失败: {e}")
+            print(f" 键盘选择区号失败: {e}")
             return False
 
 
@@ -172,9 +172,9 @@ class LoginPage:
             mobile_input = self.wait.until(EC.visibility_of_element_located(self.MOBILE_INPUT))
             mobile_input.clear()
             mobile_input.send_keys(mobile)
-            print(f"✅ 成功输入手机号: {mobile}")
+            print(f" 成功输入手机号: {mobile}")
         except Exception as e:
-            print(f"❌ 输入手机号失败: {e}")
+            print(f" 输入手机号失败: {e}")
             raise e
 
     def enter_password(self, password):
@@ -185,9 +185,9 @@ class LoginPage:
             pwd_input = self.wait.until(EC.visibility_of_element_located(self.PASSWORD_INPUT))
             pwd_input.clear()
             pwd_input.send_keys(password)
-            print("✅ 成功输入密码")
+            print(" 成功输入密码")
         except Exception as e:
-            print(f"❌ 输入密码失败: {e}")
+            print(f" 输入密码失败: {e}")
             raise e
 
         # ================= 邮箱登录操作 =================
@@ -199,9 +199,9 @@ class LoginPage:
                 tab = self._wait_clickable(self.LOGIN_TAB_EMAIL)
                 tab.click()
                 time.sleep(0.3)  # 等 Tab 切换动画
-                print("✅ 已切换到邮箱登录 Tab")
+                print(" 已切换到邮箱登录 Tab")
             except Exception as e:
-                print(f"❌ 切换邮箱 Tab 失败: {e}")
+                print(f" 切换邮箱 Tab 失败: {e}")
                 raise e
 
     def enter_email(self, email):
@@ -212,12 +212,12 @@ class LoginPage:
                 email_input = self._wait_visible(self.EMAIL_INPUT)
                 email_input.clear()
                 email_input.send_keys(email)
-                print(f"✅ 成功输入邮箱: {email}")
+                print(f" 成功输入邮箱: {email}")
             except Exception as e:
-                print(f"❌ 输入邮箱失败: {e}")
+                print(f" 输入邮箱失败: {e}")
                 raise e
 
-    # ✅新增
+    # 新增
     def check_agreement(self):
         """
         强制勾选用户协议（前置操作，防止触发温馨提示弹窗）
@@ -232,7 +232,7 @@ class LoginPage:
             self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", checkbox_input)
             time.sleep(0.5)
 
-            # ✅ 核心操作：使用 JavaScript 强制勾选
+            #  核心操作：使用 JavaScript 强制勾选
             # 1. 强制设置 checked 属性为 true
             self.driver.execute_script("arguments[0].checked = true;", checkbox_input)
             # 2. 触发 AntD 的 change 事件，让 UI 状态和文字变色
@@ -241,10 +241,10 @@ class LoginPage:
                 arguments[0].dispatchEvent(new Event('click', { bubbles: true }));
             """, checkbox_input)
 
-            print("✅ 已成功通过 JS 强制勾选《用户协议》")
+            print(" 已成功通过 JS 强制勾选《用户协议》")
 
         except Exception as e:
-            print(f"❌ 勾选协议失败: {e}")
+            print(f" 勾选协议失败: {e}")
             try:
                 allure.attach(self.driver.get_screenshot_as_png(), name="勾选失败截图",
                               attachment_type=allure.attachment_type.PNG)
@@ -259,13 +259,13 @@ class LoginPage:
         try:
             login_btn = self.wait.until(EC.element_to_be_clickable(self.LOGIN_BUTTON))
             login_btn.click()
-            print("✅ 成功点击登录按钮")
+            print(" 成功点击登录按钮")
         except Exception as e:
-            print(f"❌ 点击登录按钮失败: {e}")
+            print(f" 点击登录按钮失败: {e}")
             # JS 点击兜底
             try:
                 self.driver.execute_script("arguments[0].click();", self.driver.find_element(*self.LOGIN_BUTTON))
-                print("✅ 已通过 JS 兜底点击登录按钮")
+                print(" 已通过 JS 兜底点击登录按钮")
             except:
                 raise e
 
@@ -291,7 +291,7 @@ class LoginPage:
         except TimeoutException:
             pass
         except Exception as e:
-            print(f"⚠️ Toast 捕获异常: {e}")
+            print(f" Toast 捕获异常: {e}")
 
         return None
 
@@ -301,7 +301,7 @@ class LoginPage:
         """
         result = self.get_login_result_toast()
         if result == "success":
-            print("✅ 捕获到「登入成功」Toast")
+            print(" 捕获到「登入成功」Toast")
             return True
         return False
 
@@ -314,7 +314,7 @@ class LoginPage:
         self.select_area_code(area_code) #选择区号
         self.enter_mobile(mobile)  #输入手机号
         self.enter_password(password)  #输入密码
-        self.check_agreement()    #✅登录前直接勾选协议，避免触发温馨提示弹窗
+        self.check_agreement()    #登录前直接勾选协议，避免触发温馨提示弹窗
         self.click_login_button()  #登入按钮
 
     def login_via_email(self, email, password):
