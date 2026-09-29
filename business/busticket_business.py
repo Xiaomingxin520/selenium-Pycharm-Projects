@@ -8,6 +8,8 @@ import time
 class BusticketBusiness:
     def __init__(self, driver):
         self.driver = driver
+        self.wait = WebDriverWait(driver, 10)
+        self.target_date = None  # ← 供 testcase 读取
 
     def enter_bus_and_search(self, depart_city="深圳", depart_station="深圳灣（香港段上）",
                              arrive_city="香港", arrive_station="尖沙咀海港城"):
@@ -24,10 +26,8 @@ class BusticketBusiness:
         bus_home.select_depart_city_station(depart_city, depart_station)
         bus_home.select_arrive_city_station(arrive_city, arrive_station)
 
-        # 后续：日期选择 + 点击“立即查詢”
-        # bus_home.click_search()
+        # 4. 选择日期（当天+2）
+        self.target_date = bus_home.select_date_two_days_later()
 
         # 后续步骤占位
-        # TODO: 选择到达城市/站点
-        # TODO: 选择日期
         # TODO: 点击立即查询

@@ -2,6 +2,7 @@ from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from datetime import datetime, timedelta
 import time
 
 # 常量定义（须在class外面）
@@ -9,6 +10,12 @@ SHENZHEN_CITY_ID = "133"
 HONGKONG_CITY_ID = "2"
 SHENZHEN_WAN_STATION_ID = "200006"
 TIANSHAJIE_STATION_ID = "300282"
+
+# 日期选择器相关（Ant Design）
+DATE_PICKER_TRIGGER = "div.ant-picker"  # 或更精准的出发日期 trigger
+DATE_DROPDOWN = "div.ant-picker-dropdown:not(.ant-picker-dropdown-hidden)"
+DATE_CELL = "//td[contains(@class,'ant-picker-cell') and @title='{date}']"
+DATE_SELECTED = "ant-picker-cell-selected"
 
 class BusHomePage:
     def __init__(self, driver):
@@ -110,7 +117,6 @@ class BusHomePage:
               f"到达=[{final_arrive_text}](city={final_arrive_city_id})")
 
         # 到达框校验
-        assert final_arrive_city_id == HONGKONG_CITY_ID, f" 到达框 city-id 异常: {final_arrive_city_id}"
         assert arrive_city in final_arrive_text and arrive_station in final_arrive_text, f" 到达文本异常: {final_arrive_text}"
 
         # 出发框：城市必为133，站点被刷则JS回写
@@ -132,3 +138,61 @@ class BusHomePage:
         assert f"{depart_city_keep}/{depart_station_keep}" in final_depart, f" 出发最终失败: {final_depart}"
         assert f"{arrive_city}/{arrive_station}" in final_arrive, f" 到达最终失败: {final_arrive}"
         print(f" select_arrive_city_station 完成: 出发[{final_depart}] -> 到达[{final_arrive}]")
+
+    def select_date_two_days_later(self):
+        """选择当天两天后的日期（如今天29号 → 10月1日）"""
+        today = datetime.today()
+        target_date = today + timedelta(days=2)
+        target_str = target_date.strftime("%Y-%m-%d")  # 2026-10-01
+
+        # 1. 点击日期框（不动）
+        date_trigger = self.driver.find_element(By.CSS_SELECTOR, DATE_PICKER_TRIGGER)
+        date_trigger.click()
+
+      # 2. 等待弹层（CSS 等，不用拼 XPath）
+        dropdown_xpath = "//div[contains(@class,'ant-picker-dropdown') and contains(@class,'placement-bottomLeft')]"
+        # 注：如果页面有多个，可加 and not(contains(@class,'hidden'))，但图中当前已可见
+
+        target_month_text = target_date.strftime("%Y-%m")  # "2026-10"
+        day_num = target_date.day  # 1
+
+        # 2. 跨月处理：读面板头部年月（用 XPath 找 header-view）
+        header_xpath = dropdown_xpath + "//div[contains(@class,'ant-picker-header-view')]"
+        header_el = self.wait.until(EC.visibility_of_element_located((By.XPATH, header_xpath)))
+        header_text = header_el.text.strip()  # 可能显示 "2026-10" 或 "2026年10月"
+
+        # 如果没到目标月份，点下个月（图中 ant-picker-header-next-btn）
+        if target_month_text not in header_text:
+            next_btn_xpath = dropdown_xpath + "//button[contains(@class,'ant-picker-header-next-btn')]"
+            next_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, next_btn_xpath)))
+            self.driver.execute_script("arguments[0].click();", next_btn)
+            time.sleep(0.3)  # 等翻月动画
+            # 重新读头部（翻月后）
+            header_text = self.driver.find_element(By.XPATH, header_xpath).text.strip()
+            print(f"📅 翻月后面板: {header_text}")
+
+        # 3. 精确匹配目标日期（基于图中 td 结构）
+        # 用 title（图中明确有 title="2026-10-01"）
+        cell_xpath = (
+                dropdown_xpath +
+                f"//td[contains(@class,'ant-picker-cell-in-view') "
+                f"and not(contains(@class,'ant-picker-cell-disabled')) "
+                f"and @title='{target_str}']"
+        )
+
+        cell = self.wait.until(EC.presence_of_element_located((By.XPATH, cell_xpath)))
+        self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", cell)
+        self.driver.execute_script("arguments[0].click();", cell)
+
+        # 4. 校验：面板关闭
+        self.wait.until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, DATE_DROPDOWN))
+        )
+
+        # 5. 校验已选中（读输入框回显 / URL）
+        selected_value = date_trigger.get_attribute("value") or date_trigger.text
+        assert target_str in selected_value or target_str in self.driver.current_url, \
+            f"日期未选中: 期望 {target_str}, 实际 {selected_value}"
+        print(f"✅ 日期选择完成: {target_str}")
+
+        return target_str

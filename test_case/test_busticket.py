@@ -18,3 +18,10 @@ def test_bus_select_depart_station(driver):
         arrive_city="香港",
         arrive_station="尖沙咀海港城"
     )
+
+    # 校验 URL 带 date=当天+2
+    expected_date = biz.target_date
+    current_url = driver.current_url
+    assert f"date={expected_date}" in current_url, \
+        f"URL缺少日期参数: 期望 date={expected_date}, 实际 {current_url}"
+    print(f"✅ 日期校验通过: date={expected_date}")
