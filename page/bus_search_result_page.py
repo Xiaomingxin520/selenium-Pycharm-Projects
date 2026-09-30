@@ -105,7 +105,7 @@ class BusSearchResultPage:
         print(" 下車點弹窗已出现")
 
     def close_map_modal(self):
-        """点右上角取消（截图红框），并等弹窗彻底消失"""
+        """右上角取消，并等弹窗彻底消失"""
         close_btn = self.wait.until(EC.presence_of_element_located(self.MODAL_CLOSE_BTN))
         self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", close_btn)
         try:
