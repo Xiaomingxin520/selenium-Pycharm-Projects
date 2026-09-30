@@ -9,6 +9,7 @@ class BusticketBusiness:
         self.wait = WebDriverWait(driver, 10)
         self.target_date = None  # ← 供 testcase 读取
         self.bus_home = BusHomePage(self.driver)
+        self.result = None
 
     def enter_bus_and_search(self, depart_city="深圳", depart_station="深圳灣（香港段上）",
                              arrive_city="香港", arrive_station="尖沙咀海港城"):
@@ -36,3 +37,23 @@ class BusticketBusiness:
         assert f"date={self.target_date}" in current_url, \
             f"结果页URL异常: 期望含 date={self.target_date}, 实际 {current_url}"
         print(f"✅ 搜索结果页跳转成功: {current_url}")
+
+        # 实例化结果页对象，挂到 self 上
+        from page.bus_search_result_page import BusSearchResultPage
+        self.result = BusSearchResultPage(self.driver)
+
+    def search_and_goto_last_trip_map(self, depart_city, depart_station, arrive_city, arrive_station):
+        """
+        串联：首页选城站 -> 查询 -> 行程页点最后一班【上车】站点地图 -> 断言弹窗
+        """
+        self.enter_bus_and_search(
+            depart_city=depart_city,
+            depart_station=depart_station,
+            arrive_city=arrive_city,
+            arrive_station=arrive_station
+        )
+
+        # self.result 已由 enter_bus_and_search 赋值，直接用
+        self.result.click_last_trip_map()
+        assert self.result.assert_map_modal(), "站点地图弹窗验证失败"
+        return self

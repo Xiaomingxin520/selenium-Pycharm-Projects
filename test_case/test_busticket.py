@@ -28,3 +28,16 @@ def test_bus_select_depart_station(driver):
 
     # 立即查询 + 结果页断言
     print(" 大巴票全链路（城市→日期→查询）闭环完成！")
+
+    # 3. 上車點弹窗 → 取消
+    biz.result.click_last_trip_map()
+    assert biz.result.assert_map_modal()
+    print(" 上車點弹窗校验通过！")
+    biz.result.close_map_modal()
+
+    # 4. 下車點弹窗 → 取消
+    biz.result.click_last_trip_down_map()
+    assert biz.result.assert_down_map_modal()
+    print(" 下車點弹窗校验通过！")
+    biz.result.close_map_modal()
+    print(" 上車+下車站点地图弹窗完整流程校验通过！")
