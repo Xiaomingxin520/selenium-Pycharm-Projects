@@ -22,9 +22,12 @@ class BusSearchResultPage:
     MAP_TAB_DOWN = (By.XPATH, "//*[text()='下車點']")
     MAP_TITLE1 = (By.XPATH,"//div[contains(@class,'ant-modal')][.//*[text()='下車點']]//*[contains(text(),'尖沙咀海港城')]" )
 
-    #  新增：弹窗取消/关闭按钮（红框，ant-modal-close）
+    #  新增：弹窗取消/关闭按钮
     MODAL_CLOSE_BTN = (By.CSS_SELECTOR, "button.ant-modal-close")
     MODAL_MASK = (By.CSS_SELECTOR, "div.ant-modal-mask")
+
+    # 新增：购票按钮基础定位
+    TICKET_BTN_BASE = (By.XPATH, "//button[contains(@class,'ant-btn-primary')][.//span[text()='購票']]")
 
     def __init__(self, driver):
         self.driver = driver
@@ -116,3 +119,64 @@ class BusSearchResultPage:
         # 关键：等遮罩消失，避免点下車时被弹窗挡住
         self.wait.until(EC.invisibility_of_element_located(self.MODAL_MASK))
         print(" 弹窗已关闭")
+
+# ========== 购票相关方法 ==========
+
+    def click_ticket_for_target_date(self, days_offset=2):
+        """
+        点击目标日期行程的【購票】按钮
+        默认 days_offset=2 → 今天后两天（2026-09-30 → 2026-10-02）
+        """
+        # 1. 等待列表渲染完成
+        self.wait.until(EC.presence_of_element_located(
+            (By.XPATH, "//*[contains(text(),'班次號') or contains(text(),'購 票')]")
+        ))
+
+        # 2. 定位目标行程卡片内的購票按钮
+        #    用"上車深圳灣 + 下車尖沙咀"锁定卡片，再找其内的購票按钮
+        ticket_btn = self.wait.until(EC.element_to_be_clickable(
+            (By.XPATH,
+                "//div[contains(@class,'flex-col') or contains(@class,'gap-')]"
+                "[.//*[contains(text(),'深圳灣')]]"
+                "[.//*[contains(text(),'尖沙咀')]]"
+                "//button[contains(@class,'ant-btn-primary')]"
+                "[.//span[contains(text(),'購')]]"
+            )
+        ))
+
+        # 3. 滚动并点击
+        self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", ticket_btn)
+        time.sleep(0.5)
+
+        try:
+            ticket_btn.click()
+        except Exception:
+            self.driver.execute_script("arguments[0].click();", ticket_btn)
+
+        print(f" 已点击目标行程（今天+{days_offset}天）的購票按钮")
+
+    def click_last_trip_ticket(self):
+        """
+        快捷方法：直接点最后一班（20:30）的購票按钮
+        适用于当前URL已限定日期（date=2026-10-02）的场景
+        """
+        self.wait.until(EC.presence_of_element_located(
+            (By.XPATH, "//*[contains(text(),'購 票')]")
+        ))
+
+        # 取最后一个購票按钮（最后一班 20:30）
+        ticket_btn = self.wait.until(EC.element_to_be_clickable(
+            (By.XPATH, "(//button[contains(@class,'ant-btn-primary')][.//span[contains(text(),'購')]])[last()]")
+        ))
+
+        self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", ticket_btn)
+        time.sleep(0.5)
+
+        try:
+            ticket_btn.click()
+        except Exception:
+            self.driver.execute_script("arguments[0].click();", ticket_btn)
+
+        #  等待跳转（防止误判没点击）
+        self.wait.until(EC.url_contains("create-order"))
+        print(f" 已点击最后一班行程的購票按钮，跳转至: {self.driver.current_url}")
