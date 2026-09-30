@@ -92,8 +92,6 @@ class BusHomePage:
         self.driver.execute_script("arguments[0].click();", city_el)
         print(f" 选到达城市: {arrive_city}")
 
-        time.sleep(0.5)
-
         # 4. 点站点（精准匹配弹窗内 + 纯变量，不依赖区域标题）
         time.sleep(0.5)
         station_xpath = (
