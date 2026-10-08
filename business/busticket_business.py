@@ -63,7 +63,7 @@ class BusticketBusiness:
         支持任意组合，一条方法覆盖所有场景
         """
         if not self.order:
-            raise Exception("❌ 请先调用 goto_order_page()")
+            raise Exception(" 请先调用 goto_order_page()")
 
         # 添加
         for _ in range(adult):
