@@ -141,54 +141,68 @@ class BusHomePage:
         print(f" select_arrive_city_station 完成: 出发[{final_depart}] -> 到达[{final_arrive}]")
 
     def select_date_two_days_later(self):
-        """选择当天两天后的日期（如今天29号 → 10月1日）"""
+        """选择当天两天后的日期：同月直接选，跨月翻1次，禁止跳空"""
         today = datetime.today()
         target_date = today + timedelta(days=2)
-        target_str = target_date.strftime("%Y-%m-%d")  # 2026-10-01
+        target_str = target_date.strftime("%Y-%m-%d")
 
-        # 1. 点击日期框（不动）
+        # Windows 兼容的月份文本
+        target_month_text = f"{target_date.year}年{target_date.month}月"  # "2026年10月"
+        target_month_text_alt = target_date.strftime("%Y-%m")  # "2026-10"
+        day_num = target_date.day
+
+        # 1. 点击日期框
         date_trigger = self.driver.find_element(By.CSS_SELECTOR, DATE_PICKER_TRIGGER)
         date_trigger.click()
 
-      # 2. 等待弹层（CSS 等，不用拼 XPath）
         dropdown_xpath = "//div[contains(@class,'ant-picker-dropdown') and contains(@class,'placement-bottomLeft')]"
-        # 注：如果页面有多个，可加 and not(contains(@class,'hidden'))，但图中当前已可见
-
-        target_month_text = target_date.strftime("%Y-%m")  # "2026-10"
-        day_num = target_date.day  # 1
-
-        # 2. 跨月处理：读面板头部年月（用 XPath 找 header-view）
         header_xpath = dropdown_xpath + "//div[contains(@class,'ant-picker-header-view')]"
-        header_el = self.wait.until(EC.visibility_of_element_located((By.XPATH, header_xpath)))
-        header_text = header_el.text.strip()  # 可能显示 "2026-10" 或 "2026年10月"
 
-        # 如果没到目标月份，点下个月（图中 ant-picker-header-next-btn）
-        if target_month_text not in header_text:
+        # 等待弹层
+        header_el = self.wait.until(EC.visibility_of_element_located((By.XPATH, header_xpath)))
+        header_text = header_el.text.strip()
+        print(f"  初始面板月份: {header_text}")
+
+        # 2. 跨月处理（循环点下个月，最多2次）
+        max_retry = 2
+        while (target_month_text not in header_text
+               and target_month_text_alt not in header_text
+               and max_retry > 0):
             next_btn_xpath = dropdown_xpath + "//button[contains(@class,'ant-picker-header-next-btn')]"
             next_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, next_btn_xpath)))
             self.driver.execute_script("arguments[0].click();", next_btn)
-            time.sleep(0.3)  # 等翻月动画
-            # 重新读头部（翻月后）
+            time.sleep(0.3)
             header_text = self.driver.find_element(By.XPATH, header_xpath).text.strip()
-            print(f" 翻月后面板: {header_text}")
+            print(f"  翻月后面板: {header_text}")
+            max_retry -= 1
 
-        # 3. 精确匹配目标日期（基于图中 td 结构）: 用 title（图中明确有 title="2026-10-01"）
+        # 断言防呆：防止跳到错误月份
+        assert (target_month_text in header_text or target_month_text_alt in header_text), \
+            f"月份定位异常！期望: {target_month_text}, 实际: {header_text}"
+
+        # 3. 精确匹配目标日期 (title属性)
         cell_xpath = (
                 dropdown_xpath +
                 f"//td[contains(@class,'ant-picker-cell-in-view') "
                 f"and not(contains(@class,'ant-picker-cell-disabled')) "
                 f"and @title='{target_str}']"
         )
+        try:
+            cell = self.wait.until(EC.presence_of_element_located((By.XPATH, cell_xpath)))
+        except Exception:
+            # 兜底：用日号
+            cell_xpath_fallback = (
+                    dropdown_xpath +
+                    f"//td[contains(@class,'ant-picker-cell-in-view') and text()='{day_num}']"
+            )
+            cell = self.wait.until(EC.presence_of_element_located((By.XPATH, cell_xpath_fallback)))
 
-        cell = self.wait.until(EC.presence_of_element_located((By.XPATH, cell_xpath)))
         self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", cell)
         self.driver.execute_script("arguments[0].click();", cell)
 
-        # 4. 校验：面板关闭
-        self.wait.until(
-            EC.invisibility_of_element_located((By.CSS_SELECTOR, DATE_DROPDOWN))
-        )
-        print(f" 日期选择完成: {target_str}")
+        # 4. 校验面板关闭
+        self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, DATE_DROPDOWN)))
+        print(f"  日期选择完成: {target_str}")
         return target_str
 
     def click_search_now(self):

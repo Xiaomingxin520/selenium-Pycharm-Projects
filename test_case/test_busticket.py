@@ -1,6 +1,7 @@
 import pytest
 from business.busticket_business import BusticketBusiness
-
+from datetime import datetime, timedelta
+import time
 
 @pytest.mark.bus
 def test_bus_select_depart_station(driver):
@@ -21,10 +22,14 @@ def test_bus_select_depart_station(driver):
 
     # 校验 URL 带 date=当天+2
     expected_date = biz.target_date
+    if not expected_date:
+        expected_date = (datetime.today() + timedelta(days=2)).strftime("%Y-%m-%d")
+
     current_url = driver.current_url
+    # 兼容 URL 中可能含其他参数，仅校验包含
     assert f"date={expected_date}" in current_url, \
         f"URL缺少日期参数: 期望 date={expected_date}, 实际 {current_url}"
-    print(f" 日期校验通过: date={expected_date}")
+    print(f"日期校验通过: date={expected_date}")
 
     # 3. 上車點弹窗 → 取消
     biz.result.click_last_trip_map()
@@ -43,29 +48,59 @@ def test_bus_select_depart_station(driver):
 
 @pytest.mark.bus
 def test_bus_add_adult_on_order_page(driver):
-    """
-    场景：完整链路 → 结果页点购票 → 确认订单页 → 点击成人+号 → 断言数量增加
-    """
     biz = BusticketBusiness(driver)
-
-    # 1. 搜索（复用已有方法）
-    biz.enter_bus_and_search(
-        depart_city="深圳",
-        depart_station="深圳灣（香港段上）",
-        arrive_city="香港",
-        arrive_station="尖沙咀海港城"
-    )
-
-    # 2. 地图弹窗校验（可选，保留你的原有逻辑）
-    biz.result.click_last_trip_map()
-    assert biz.result.assert_map_modal()
-    biz.result.close_map_modal()
-
-    biz.result.click_last_trip_down_map()
-    assert biz.result.assert_down_map_modal()
-    biz.result.close_map_modal()
-
-    # 3. 购票 → 跳转订单页 → 点成人+号（核心新增）
+    biz.enter_bus_and_search()
+    biz.handle_map_modals()
     biz.goto_order_and_add_adult()
-
     print(" 成人+号全链路测试通过！")
+
+@pytest.mark.bus
+def test_bus_add_child_on_order_page(driver):
+    biz = BusticketBusiness(driver)
+    biz.enter_bus_and_search()
+    biz.handle_map_modals()
+    biz.goto_order_and_add_child()
+    print(" 兒童+号全链路测试通过！")
+
+
+@pytest.mark.bus
+def test_bus_add_elder_on_order_page(driver):
+    biz = BusticketBusiness(driver)
+    biz.enter_bus_and_search()
+    biz.handle_map_modals()
+    biz.goto_order_and_add_elder()
+    print(" 長者+号全链路测试通过！")
+
+@pytest.mark.bus
+@pytest.mark.parametrize("adult,child,elder,case_name", [
+    (1, 1, 1, "三者全选"),
+    (0, 1, 1, "只儿童长者"),
+    (1, 1, 0, "只成人儿童"),
+    (1, 0, 1, "只成人长者"),
+    (1, 0, 0, "只成人"),
+    (0, 1, 0, "只儿童"),
+    (0, 0, 1, "只长者"),
+    (0, 0, 0, "无乘客"),
+])
+def test_bus_passenger_combinations(driver, adult, child, elder, case_name):
+    print(f"\n 场景: {case_name} | 成人={adult}, 兒童={child}, 長者={elder}")
+
+    biz = BusticketBusiness(driver)
+    biz.enter_bus_and_search()
+    biz.handle_map_modals()
+    biz.goto_order_page()
+    biz.add_passengers_and_submit(adult=adult, child=child, elder=elder)
+
+    print(f" {case_name} 场景测试通过！")
+
+
+# ========== 后续接 CSV 时，只需改这里 ==========
+# @pytest.mark.bus
+# def test_bus_passenger_from_csv(driver, passenger_combination):
+#     adult, child, elder, case_name, _ = passenger_combination
+#     biz = BusticketBusiness(driver)
+#     biz.enter_bus_and_search()
+#     biz.handle_map_modals()
+#     biz.goto_order_page()
+#     biz.add_passengers_and_submit(adult=adult, child=child, elder=elder)
+#     print(f"✅ {case_name} 场景测试通过！")
