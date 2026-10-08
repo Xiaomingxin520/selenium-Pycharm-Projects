@@ -107,3 +107,35 @@ class BusticketBusiness:
         self.goto_order_page()
         self.add_passengers_and_submit(adult=adult, child=child, elder=elder)
         return self
+
+# ========== 登录态下单==========
+
+    def login_and_goto_order(self, email="test@gmail.com", pwd="123456"):
+        """
+        登录态场景统一入口：登录 → 搜索 → 弹窗 → 订单页
+        复用已有 LoginBusiness，不重复造轮子
+        """
+        from business.login_business import LoginBusiness
+
+        login_biz = LoginBusiness(self.driver)
+        login_biz.login(email, pwd)
+
+        # 登录后回到首页（确保搜索上下文正确）
+        self.driver.get("https://www.testhopetrip.dabapiao.com/")
+        time.sleep(1)
+
+        # 复用已有搜索 + 弹窗 + 跳转流程
+        self.enter_bus_and_search()
+        self.handle_map_modals()
+        self.goto_order_page()
+        return self
+
+    def login_and_add_passengers_and_submit(self, email="test@gmail.com", pwd="123456",
+                                            adult=0, child=0, elder=0):
+        """
+        登录态场景：一步到位（登录 → 搜索 → 选座 → 添加乘客 → 提交）
+        适合测试用例直接调用，减少重复编排
+        """
+        self.login_and_goto_order(email, pwd)
+        self.add_passengers_and_submit(adult=adult, child=child, elder=elder)
+        return self

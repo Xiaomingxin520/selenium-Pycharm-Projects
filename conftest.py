@@ -1,12 +1,9 @@
 # conftest.py
-# 作用：
-# 1. 提供全局 pytest fixture
-# 2. 每个测试用例独立启动/关闭浏览器
-# 3. 统一浏览器配置、隐式等待、driver 生命周期管理
-#  新增：本地运行 pytest 一切照旧，只新增预设3个环境变量入口，往后有需求接Jenkins直接设变量即可。
+# 作用：1. 提供全局 pytest fixture     2. 每个测试用例独立启动/关闭浏览器      3. 统一浏览器配置、隐式等待、driver 生命周期管理
+# 新增：本地运行 pytest 一切照旧，只新增预设3个环境变量入口，往后有需求接Jenkins直接设变量即可。
 
 import json
-import os  # ✅ 已修改：新增 os 导入（原文件未导入）
+import os  # 已修改：新增 os 导入（原文件未导入）
 import pytest
 from pathlib import Path
 from selenium import webdriver
@@ -196,3 +193,110 @@ def pytest_addoption(parser):
         default=False,
         help="启用无头模式（CI 使用）"
     )
+
+# ============================================================
+#  新增：登录态管理（session 级登录一次，所有用例共享 Cookie）
+# 使用方式：测试用例参数写 `logged_in_driver` 即可自动带登录态
+# 账号密码通过环境变量或默认值传入，不污染现有 driver fixture
+# ============================================================
+
+@pytest.fixture(scope="session")
+def _login_driver():
+    """
+    session 级专用浏览器：只开一次，专门用来登录拿 Cookie
+    """
+    from selenium import webdriver
+    from selenium.webdriver.chrome.service import Service
+    from selenium.webdriver.chrome.options import Options
+    import os
+
+    options = Options()
+    options.add_argument("--start-maximized")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-dev-shm-usage")
+
+    _driver_path = os.getenv("CHROMEDRIVER_PATH", r"D:\Chromedriver\chromedriver.exe")
+    service = Service(_driver_path)
+    driver = webdriver.Chrome(service=service, options=options)
+
+    driver.execute_cdp_cmd(
+        "Page.addScriptToEvaluateOnNewDocument",
+        {"source": "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"}
+    )
+    driver.implicitly_wait(10)
+
+    _base_url = os.getenv("BASE_URL", "https://www.testhopetrip.dabapiao.com/")
+    driver.get(_base_url)
+    driver.implicitly_wait(0)
+
+    yield driver
+
+    driver.quit()
+
+
+@pytest.fixture(scope="session")
+def login_cookies(_login_driver):
+    """
+    session 级：用专用浏览器登录一次，返回 cookies
+    调用 LoginBusiness.loginBusiness() 静态方法（非实例化）
+    """
+    from business.login_business import LoginBusiness
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.common.by import By
+    import time
+
+    _email = os.getenv("LOGIN_EMAIL", "test@gmail.com")
+    _pwd = os.getenv("LOGIN_PWD", "123456")
+
+    #  关键修正：调用静态方法，不是实例化
+    LoginBusiness.loginBusiness(
+        driver=_login_driver,
+        email=_email,
+        password=_pwd,
+        login_mode="email"
+    )
+
+    # 显式等待登录成功标志
+    try:
+        WebDriverWait(_login_driver, 15).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR,
+                 ".user-avatar, .username, [class*='avatar'], "
+                 "[class*='user-info'], .logout-btn, a[href*='logout'], "
+                 "[class*='header-user'], .el-dropdown-link, "
+                 "[class*='nickname'], [class*='user-name']")
+            )
+        )
+    except Exception as e:
+        print(f"  登录成功标志等待超时（将使用当前已有 Cookie）: {e}")
+
+    # 等 Session Cookie 种完
+    time.sleep(1)
+    cookies = _login_driver.get_cookies()
+    print(f"  登录态已建立，共 {len(cookies)} 个 Cookie")
+    return cookies
+
+
+@pytest.fixture(scope="function")
+def logged_in_driver(driver, login_cookies):
+    """
+    function 级：在测试用 driver 基础上注入登录态 Cookie
+    不影响原有 driver fixture，两者可共存
+    """
+    driver.delete_all_cookies()
+    for cookie in login_cookies:
+        cookie = dict(cookie)
+        cookie.pop("domain", None)
+        cookie.pop("sameSite", None)
+        cookie.pop("expiry", None)
+        try:
+            driver.add_cookie(cookie)
+        except Exception as e:
+            print(f"  注入 Cookie 跳过: {cookie.get('name')} - {e}")
+
+    driver.refresh()
+    yield driver
