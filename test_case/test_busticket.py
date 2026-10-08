@@ -145,37 +145,6 @@ def test_bus_select_depart_station_with_login(logged_in_driver):
     assert "create-order" in logged_in_driver.current_url, " 未跳转到下单页"
     print(" 登录态-购票跳转断言通过！")
 
-
-@pytest.mark.bus
-def test_bus_add_adult_on_order_page_with_login(logged_in_driver):
-    """登录态：成人+号全链路"""
-    biz = BusticketBusiness(logged_in_driver)
-    biz.enter_bus_and_search()
-    biz.handle_map_modals()
-    biz.goto_order_and_add_adult()
-    print(" 登录态-成人+号全链路测试通过！")
-
-
-@pytest.mark.bus
-def test_bus_add_child_on_order_page_with_login(logged_in_driver):
-    """登录态：兒童+号全链路"""
-    biz = BusticketBusiness(logged_in_driver)
-    biz.enter_bus_and_search()
-    biz.handle_map_modals()
-    biz.goto_order_and_add_child()
-    print(" 登录态-兒童+号全链路测试通过！")
-
-
-@pytest.mark.bus
-def test_bus_add_elder_on_order_page_with_login(logged_in_driver):
-    """登录态：長者+号全链路"""
-    biz = BusticketBusiness(logged_in_driver)
-    biz.enter_bus_and_search()
-    biz.handle_map_modals()
-    biz.goto_order_and_add_elder()
-    print(" 登录态-長者+号全链路测试通过！")
-
-
 @pytest.mark.bus
 @pytest.mark.parametrize("adult,child,elder,case_name", [
     (1, 0, 0, "登录态-只成人"),
