@@ -168,7 +168,6 @@ def test_bus_passenger_combinations_with_login(logged_in_driver, adult, child, e
 
     print(f" 登录态-{case_name} 场景测试通过！")
 
-
 # ========== 登录态 CSV 数据驱动（后续启用，取消注释即可）==========
 # @pytest.mark.bus
 # def test_bus_passenger_from_csv_with_login(logged_in_driver, passenger_combination):
@@ -180,3 +179,41 @@ def test_bus_passenger_combinations_with_login(logged_in_driver, adult, child, e
 #     biz.goto_order_page()
 #     biz.add_passengers_and_submit(adult=adult, child=child, elder=elder)
 #     print(f" 登录态-{case_name} 场景测试通过！")
+
+@pytest.mark.bus
+def test_bus_order_with_fields_adult_only(logged_in_driver):
+    """登录态：只选1成人，填写全部下单字段后提交"""
+    biz = BusticketBusiness(logged_in_driver)
+    biz.enter_bus_and_search()
+    biz.handle_map_modals()
+    biz.goto_order_page()
+    biz.add_passengers_fill_fields_and_submit(
+        adult=1, child=0, elder=0,
+        name_cn="張三", phone="96526666",
+        email="test@gmail.com", remark="测试备注"
+    )
+    print(" 登录态-只成人+填写字段+提交 测试通过！")
+
+@pytest.mark.bus
+@pytest.mark.parametrize("adult,child,elder,case_name", [
+    (1, 0, 0, "登录态-只成人+字段"),
+    (0, 1, 0, "登录态-只儿童+字段"),
+    (0, 0, 1, "登录态-只长者+字段"),
+    (1, 1, 0, "登录态-成人儿童+字段"),
+    (1, 0, 1, "登录态-成人长者+字段"),
+    (0, 1, 1, "登录态-儿童长者+字段"),
+    (1, 1, 1, "登录态-三者全选+字段"),
+], ids=lambda x: x if isinstance(x, str) else "")
+def test_bus_order_with_fields_combinations(logged_in_driver, adult, child, elder, case_name):
+    """登录态：各乘客组合 + 填写下单字段 + 提交"""
+    print(f"\n 场景: {case_name} | 成人={adult}, 兒童={child}, 長者={elder}")
+    biz = BusticketBusiness(logged_in_driver)
+    biz.enter_bus_and_search()
+    biz.handle_map_modals()
+    biz.goto_order_page()
+    biz.add_passengers_fill_fields_and_submit(
+        adult=adult, child=child, elder=elder,
+        name_cn="張三", phone="96526666",
+        email="test@gmail.com", remark="测试备注"
+    )
+    print(f" {case_name} 测试通过！")

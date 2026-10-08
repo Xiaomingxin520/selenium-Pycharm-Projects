@@ -139,3 +139,39 @@ class BusticketBusiness:
         self.login_and_goto_order(email, pwd)
         self.add_passengers_and_submit(adult=adult, child=child, elder=elder)
         return self
+
+    def add_passengers_fill_fields_and_submit(
+            self, adult=0, child=0, elder=0,
+            name_cn="張三", phone="96526666",
+            email="test@gmail.com", remark="测试备注"
+    ):
+        """完整下单流程：添加乘客 → 填写下单字段 → 提交订单"""
+        if not self.order:
+            raise Exception(" 请先调用 goto_order_page()")
+
+        # 1. 添加乘客 + 提交（复用已有方法，但提交前拦截）
+        # 先加人+断言
+        for _ in range(adult):
+            self.order.click_adult_plus();
+            time.sleep(0.3)
+        for _ in range(child):
+            self.order.click_child_plus();
+            time.sleep(0.3)
+        for _ in range(elder):
+            self.order.click_elder_plus();
+            time.sleep(0.3)
+
+        time.sleep(1)
+        a = self.order.get_adult_count()
+        c = self.order.get_child_count()
+        e = self.order.get_elder_count()
+        assert a >= adult and c >= child and e >= elder
+        print(f" 乘客添加完成：成人={a}, 兒童={c}, 長者={e}")
+
+        # 2. 填写下单字段
+        self.order.fill_order_fields(name_cn=name_cn, phone=phone, email=email, remark=remark)
+
+        # 3. 提交订单
+        self.order.click_submit_order()
+        print(" 订单已提交")
+        return self
