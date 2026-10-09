@@ -5,8 +5,8 @@ class LoginBusiness:
     @staticmethod
     def loginBusiness(driver, phone="", password="", email="", area_code="+86", login_mode="auto"):
         """
-        统一登录业务封装
-        :param login_mode:
+        统一登录业务封装:
+        param login_mode:
             "auto"  → 有email走邮箱，有phone走手机（默认）
             "email" → 强制走邮箱（用例29/30用）
             "phone" → 强制走手机
@@ -29,11 +29,10 @@ class LoginBusiness:
             elif phone_valid:
                 use_email = False
             else:
-                # 都空 → 用例29/30期望校验邮箱 → 强制走邮箱
-                use_email = True
+                use_email = True   # 都空 → 用例29/30期望校验邮箱 → 强制走邮箱
 
+        # ========== 邮箱登录 ==========
         if use_email:
-            # ========== 邮箱登录 ==========
             page.click_login_register()
             page.switch_to_email_tab()
             if email and str(email).strip() not in ["<null>", "", "None"]:
@@ -44,8 +43,8 @@ class LoginBusiness:
             time.sleep(1)
             page.click_login_button()
 
+        # ========== 手机号登录（原逻辑不变） ==========
         else:
-            # ========== 手机号登录（原有逻辑不变） ==========
             page.click_login_register()
             if area_code:
                 page.select_area_code(area_code)

@@ -165,16 +165,16 @@ class TestLogin:
                     area_code=area_code
                 )
 
-                time.sleep(1.5)  # ✅ 关键等待：确保 AntD Toast 完全渲染出来
+                time.sleep(1.5)  #关键等待：确保 AntD Toast 完全渲染出来
 
-                if expect_success.lower() == 'true':
-                    # ✅ 登录成功：捕获 AntD 成功 Toast
+                if expect_success.lower() == 'true':   #登录成功：捕获 AntD 成功 Toast
+
                     actual_text = WebDriverWait(self.driver, 6).until(
                         EC.visibility_of_element_located(LoginPage.LOGIN_SUCCESS_TOAST)
                     ).text
 
-                else:
-                    # ✅ 登录失败：优先表单级错误，其次错误 Toast
+                else:   #登录失败：优先表单级错误，其次错误 Toast
+
                     try:
                         actual_text = self.driver.find_element(*LoginPage.FORM_ERROR).text
                     except Exception:
@@ -182,8 +182,7 @@ class TestLogin:
                             EC.visibility_of_element_located(LoginPage.LOGIN_ERROR_TOAST)
                         ).text
 
-            except Exception as e:
-                # 出现异常时截图，便于定位问题
+            except Exception as e:   # 出现异常时截图，便于定位问题
                 allure.attach(
                     self.driver.get_screenshot_as_png(),
                     name='操作或定位异常',
@@ -191,13 +190,12 @@ class TestLogin:
                 )
                 assert False, f'操作或定位异常: {e}'
 
-        with allure.step('断言验证'):
+        with allure.step('断言验证'):   # 验证实际文本中是否包含预期文本
             try:
-                # 验证实际文本中是否包含预期文本
                 assert expect_text in actual_text, \
                     f'预期文本[{expect_text}]不在实际文本[{actual_text}]中'
-            except Exception as e:
-                # 断言失败时截图
+
+            except Exception as e:   # 断言失败时截图
                 allure.attach(
                     self.driver.get_screenshot_as_png(),
                     name='断言失败',
@@ -205,16 +203,13 @@ class TestLogin:
                 )
                 assert False, str(e)
 
-        with allure.step('执行完成截图'):
-            # 用例执行结束后截图，记录最终状态
+        with allure.step('执行完成截图'): # 用例执行结束后截图，记录最终状态
             allure.attach(
                 self.driver.get_screenshot_as_png(),
                 name='执行结果截图',
                 attachment_type=allure.attachment_type.PNG
             )
 
-    def teardown_method(self):
-        """
-        driver 生命周期由 conftest.py 管理，这里不再 quit
-        """
+    def teardown_method(self):    #driver 生命周期由 conftest.py 管理，这里不再 quit
+
         pass

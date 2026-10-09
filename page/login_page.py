@@ -62,7 +62,6 @@ class LoginPage:
         self.wait = WebDriverWait(driver, timeout)
 
     # ================= 内部工具 =================
-
     def _wait_visible(self, locator):
         """
         等待元素可见
@@ -93,7 +92,6 @@ class LoginPage:
         return el
 
     # ================= 页面操作 =================
-
     def open_user_menu(self):
         """
         打开右上角用户菜单（头像下拉框）
@@ -128,12 +126,10 @@ class LoginPage:
         self.click(self.MENU_LOGIN_REGISTER)
         self._wait_visible(self.LOGIN_MODAL_TITLE)
 
-    # 新增
-    # # ================= 页面操作：模拟真人敲键盘事件（对抗 AntD） =================
+    #  ================= 页面操作：模拟真人敲键盘事件（对抗 AntD） =================
     def select_area_code(self, target_code="+86"):
         """
-        键盘流选择区号（基于默认+852的顺序）
-        +852(默认) -> ↑:+86 | ↓:+853 | ↓↓:+886
+        键盘流选择区号（基于默认+852的顺序）： +852(默认) -> ↑:+86 | ↓:+853 | ↓↓:+886
         """
         try:
             container = self._wait_clickable(self.AREA_CODE_CONTAINER)
@@ -163,7 +159,6 @@ class LoginPage:
             print(f" 键盘选择区号失败: {e}")
             return False
 
-
     def enter_mobile(self, mobile):
         """
         输入手机号
@@ -190,7 +185,7 @@ class LoginPage:
             print(f" 输入密码失败: {e}")
             raise e
 
-        # ================= 邮箱登录操作 =================
+    # ================= 邮箱登录操作 =================
     def switch_to_email_tab(self):
             """
             切换到邮箱登录 Tab
@@ -217,11 +212,9 @@ class LoginPage:
                 print(f" 输入邮箱失败: {e}")
                 raise e
 
-    # 新增
     def check_agreement(self):
         """
-        强制勾选用户协议（前置操作，防止触发温馨提示弹窗）
-        使用 JS 强制修改 checked 属性并触发 change 事件，解决 AntD 拦截问题
+        强制勾选用户协议（前置操作，防止触发温馨提示弹窗），使用 JS 强制修改 checked 属性并触发 change 事件，解决 AntD 拦截问题
         """
         try:
             checkbox_input = self.wait.until(
@@ -339,7 +332,6 @@ class LoginPage:
             return False
 
     # ================= 断言区 =================
-
     def is_login_success(self):
         """
         判断登录是否成功（通过用户信息元素）

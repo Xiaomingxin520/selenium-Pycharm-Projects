@@ -1,7 +1,6 @@
 import pytest
 from business.busticket_business import BusticketBusiness
 from datetime import datetime, timedelta
-import time
 
 @pytest.mark.bus
 def test_bus_select_depart_station(driver):
@@ -26,22 +25,23 @@ def test_bus_select_depart_station(driver):
         expected_date = (datetime.today() + timedelta(days=2)).strftime("%Y-%m-%d")
 
     current_url = driver.current_url
+
     # 兼容 URL 中可能含其他参数，仅校验包含
     assert f"date={expected_date}" in current_url, \
         f"URL缺少日期参数: 期望 date={expected_date}, 实际 {current_url}"
     print(f"日期校验通过: date={expected_date}")
 
-    # 3. 上車點弹窗 → 取消
+    # 上車點弹窗 → 取消
     biz.result.click_last_trip_map()
     assert biz.result.assert_map_modal()
     biz.result.close_map_modal()
 
-    # 4. 下車點弹窗 → 取消
+    # 下車點弹窗 → 取消
     biz.result.click_last_trip_down_map()
     assert biz.result.assert_down_map_modal()
     biz.result.close_map_modal()
 
-    # 5. 点击购票
+    # 点击购票
     biz.result.click_last_trip_ticket()
     assert "create-order" in driver.current_url, " 未跳转到下单页"
     print(" 购票跳转断言通过！")

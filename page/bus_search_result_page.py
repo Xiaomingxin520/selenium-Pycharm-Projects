@@ -8,8 +8,7 @@ class BusSearchResultPage:
     LAST_TRIP_MAP_BTN = (By.XPATH,
         "(//*[contains(text(),'上車')]/following-sibling::*[contains(text(),'站點地圖')] | "
         "//*[contains(text(),'上車')]/../*[contains(text(),'站點地圖')] | "
-        "//*[contains(text(),'上車')]//following::*[contains(text(),'站點地圖')][1])[last()]"
-        )
+        "//*[contains(text(),'上車')]//following::*[contains(text(),'站點地圖')][1])[last()]")
 
     # 上車弹窗特征
     MAP_TAB_UP = (By.XPATH, "//*[text()='上車點']")
@@ -120,8 +119,7 @@ class BusSearchResultPage:
         self.wait.until(EC.invisibility_of_element_located(self.MODAL_MASK))
         print(" 弹窗已关闭")
 
-# ========== 购票相关方法 ==========
-
+    # ========== 购票相关方法 ==========
     def click_ticket_for_target_date(self, days_offset=2):
         """
         点击目标日期行程的【購票】按钮
@@ -132,8 +130,7 @@ class BusSearchResultPage:
             (By.XPATH, "//*[contains(text(),'班次號') or contains(text(),'購 票')]")
         ))
 
-        # 2. 定位目标行程卡片内的購票按钮
-        #    用"上車深圳灣 + 下車尖沙咀"锁定卡片，再找其内的購票按钮
+        # 2. 定位目标行程卡片内的購票按钮：用"上車深圳灣 + 下車尖沙咀"锁定卡片，再找其内的購票按钮
         ticket_btn = self.wait.until(EC.element_to_be_clickable(
             (By.XPATH,
                 "//div[contains(@class,'flex-col') or contains(@class,'gap-')]"
@@ -157,8 +154,7 @@ class BusSearchResultPage:
 
     def click_last_trip_ticket(self):
         """
-        快捷方法：直接点最后一班（20:30）的購票按钮
-        适用于当前URL已限定日期（date=2026-10-02）的场景
+        快捷方法：直接点最后一班（20:30）的購票按钮。适用于当前URL已限定日期（date=2026-10-02）的场景
         """
         self.wait.until(EC.presence_of_element_located(
             (By.XPATH, "//*[contains(text(),'購 票')]")

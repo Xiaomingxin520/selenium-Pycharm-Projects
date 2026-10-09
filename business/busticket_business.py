@@ -58,8 +58,7 @@ class BusticketBusiness:
     # ========== 统一添加乘客 + 提交 ==========
     def add_passengers_and_submit(self, adult=0, child=0, elder=0):
         """
-        订单页：按数量添加乘客 → 提交订单
-        支持任意组合，一条方法覆盖所有场景
+        订单页：按数量添加乘客 → 提交订单，支持任意组合，一条方法覆盖所有场景
         """
         if not self.order:
             raise Exception(" 请先调用 goto_order_page()")
@@ -107,8 +106,7 @@ class BusticketBusiness:
         self.add_passengers_and_submit(adult=adult, child=child, elder=elder)
         return self
 
-# ========== 登录态下单==========
-
+    # ========== 登录态下单==========
     def login_and_goto_order(self, email="test@gmail.com", pwd="123456"):
         """
         登录态场景统一入口：登录 → 搜索 → 弹窗 → 订单页
@@ -132,8 +130,7 @@ class BusticketBusiness:
     def login_and_add_passengers_and_submit(self, email="test@gmail.com", pwd="123456",
                                             adult=0, child=0, elder=0):
         """
-        登录态场景：一步到位（登录 → 搜索 → 选座 → 添加乘客 → 提交）
-        适合测试用例直接调用，减少重复编排
+        登录态场景：一步到位（登录 → 搜索 → 选座 → 添加乘客 → 提交），适合测试用例直接调用，减少重复编排
         """
         self.login_and_goto_order(email, pwd)
         self.add_passengers_and_submit(adult=adult, child=child, elder=elder)
@@ -181,9 +178,7 @@ class BusticketBusiness:
         email="test@gmail.com", remark="测试备注"
     ):
         """
-        完整下单流程：
-        添加乘客 → 填写字段 → 提交订单 → 验证跳转到 confirm-order 页
-        返回 groupId
+        完整下单流程：添加乘客 → 填写字段 → 提交订单 → 验证跳转到 confirm-order 页，返回 groupId
         """
         if not self.order:
             raise Exception(" 请先调用 goto_order_page()")

@@ -12,17 +12,15 @@ class BusOrderPayPage:
         # 提交按钮
         self.submit_order_btn = (By.XPATH, "//button[.//span[contains(text(),'提交订单')] or .//span[contains(text(),'提交訂單')]]")
 
-        #  所有加号图标（统一用这个，不要再用 adult_plus_btn）
+        # 所有加号图标（统一用这个，不要再用 adult_plus_btn）
         self.plus_icons = (By.CSS_SELECTOR, ".anticon-plus")
 
         # 成人数量标签（备用）
-        self.adult_count_label = (By.XPATH,
-            "//span[contains(@class,'anticon-plus')]/parent::div/parent::div/div[2]")
+        self.adult_count_label = (By.XPATH,"//span[contains(@class,'anticon-plus')]/parent::div/parent::div/div[2]")
 
         # ========== 下单字段定位器（新增）==========
         # 中文名输入框
-        self.chinese_name_input = (By.XPATH,
-            "//input[contains(@placeholder,'中文名') or contains(@placeholder,'請輸入您的中文名')]")
+        self.chinese_name_input = (By.XPATH,"//input[contains(@placeholder,'中文名') or contains(@placeholder,'請輸入您的中文名')]")
 
         # 中转英按钮（img[alt='拼接着'] 或 包含"中转英"文字）
         self.translate_btn = (By.XPATH,
@@ -31,24 +29,19 @@ class BusOrderPayPage:
             " | //button[contains(text(),'中轉英') or contains(text(),'中转英')]")
 
         # 拼音姓输入框
-        self.surname_input = (By.XPATH,
-            "//input[contains(@placeholder,'姓') and not(contains(@placeholder,'中文'))]")
+        self.surname_input = (By.XPATH,"//input[contains(@placeholder,'姓') and not(contains(@placeholder,'中文'))]")
 
         # 拼音名输入框
-        self.given_name_input = (By.XPATH,
-            "//input[contains(@placeholder,'名') and not(contains(@placeholder,'中文'))]")
+        self.given_name_input = (By.XPATH,"//input[contains(@placeholder,'名') and not(contains(@placeholder,'中文'))]")
 
         # 手机号
-        self.phone_input = (By.XPATH,
-            "//input[contains(@placeholder,'手機號') or contains(@placeholder,'手机号')]")
+        self.phone_input = (By.XPATH,"//input[contains(@placeholder,'手機號') or contains(@placeholder,'手机号')]")
 
         # 邮箱
-        self.email_input = (By.XPATH,
-            "//input[contains(@placeholder,'电邮') or contains(@placeholder,'郵箱') or contains(@placeholder,'Email')]")
+        self.email_input = (By.XPATH,"//input[contains(@placeholder,'电邮') or contains(@placeholder,'郵箱') or contains(@placeholder,'Email')]")
 
         # 备注
-        self.remark_textarea = (By.XPATH,
-            "//textarea[contains(@placeholder,'备注') or contains(@placeholder,'備註')]")
+        self.remark_textarea = (By.XPATH,"//textarea[contains(@placeholder,'备注') or contains(@placeholder,'備註')]")
 
     # ========== 页面加载 ==========
     def wait_for_page_load(self):
@@ -180,8 +173,7 @@ class BusOrderPayPage:
     def fill_order_fields(self, name_cn="張三", phone="96526666",
                          email="test@gmail.com", remark="测试备注"):
         """
-        统一填写所有下单字段（完整链路）：
-        中文名 → 中转英（自动回填姓/名拼音）→ 手机号 → 邮箱 → 备注
+        统一填写所有下单字段（完整链路）：中文名 → 中转英（自动回填姓/名拼音）→ 手机号 → 邮箱 → 备注
         """
         self.fill_chinese_name(name_cn)
         self.click_translate_to_english()
@@ -196,8 +188,7 @@ class BusOrderPayPage:
 
     def click_submit_order_and_wait_confirm(self, timeout=15):
         """
-        点击提交订单 → 等待跳转到 confirm-order 页面
-        返回 groupId（动态提取，供后续业务使用）
+        点击提交订单 → 等待跳转到 confirm-order 页面，返回 groupId（动态提取，供后续业务使用）
         """
         btn = self.wait.until(EC.element_to_be_clickable(self.submit_order_btn))
         self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", btn)
