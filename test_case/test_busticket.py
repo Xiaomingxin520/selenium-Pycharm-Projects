@@ -217,3 +217,51 @@ def test_bus_order_with_fields_combinations(logged_in_driver, adult, child, elde
         email="test@gmail.com", remark="测试备注"
     )
     print(f" {case_name} 测试通过！")
+
+# 验证跳转confirm-order
+@pytest.mark.bus
+def test_bus_submit_and_confirm_page(logged_in_driver):
+    """登录态：1成人下单，提交后验证跳转到 confirm-order 确认页"""
+    biz = BusticketBusiness(logged_in_driver)
+    biz.enter_bus_and_search()
+    biz.handle_map_modals()
+    biz.goto_order_page()
+
+    group_id = biz.add_passengers_fill_fields_and_submit_with_confirm(
+        adult=1, child=0, elder=0,
+        name_cn="張三", phone="96526666",
+        email="test@gmail.com", remark="测试备注"
+    )
+
+    assert group_id is not None, "提交后未获取到 groupId"
+    assert group_id.isdigit(), f"groupId 不是数字: {group_id}"
+    print(f" 登录态-下单跳转确认页测试通过！groupId={group_id}")
+
+
+@pytest.mark.bus
+@pytest.mark.parametrize("adult,child,elder,case_name", [
+    (1, 0, 0, "登录态-只成人-提交跳转"),
+    (0, 1, 0, "登录态-只儿童-提交跳转"),
+    (0, 0, 1, "登录态-只长者-提交跳转"),
+    (1, 1, 0, "登录态-成人儿童-提交跳转"),
+    (1, 0, 1, "登录态-成人长者-提交跳转"),
+    (0, 1, 1, "登录态-儿童长者-提交跳转"),
+    (1, 1, 1, "登录态-三者全选-提交跳转"),
+], ids=lambda x: x if isinstance(x, str) else "")
+def test_bus_submit_and_confirm_combinations(logged_in_driver, adult, child, elder, case_name):
+    """登录态：各乘客组合 → 提交 → 验证跳转 confirm-order"""
+    print(f"\n 场景: {case_name} | 成人={adult}, 兒童={child}, 長者={elder}")
+
+    biz = BusticketBusiness(logged_in_driver)
+    biz.enter_bus_and_search()
+    biz.handle_map_modals()
+    biz.goto_order_page()
+
+    group_id = biz.add_passengers_fill_fields_and_submit_with_confirm(
+        adult=adult, child=child, elder=elder,
+        name_cn="張三", phone="96526666",
+        email="test@gmail.com", remark="测试备注"
+    )
+
+    assert group_id is not None, f"{case_name} 提交后未获取到 groupId"
+    print(f" {case_name} 提交跳转测试通过！groupId={group_id}")

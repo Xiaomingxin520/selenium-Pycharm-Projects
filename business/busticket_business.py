@@ -175,3 +175,46 @@ class BusticketBusiness:
         self.order.click_submit_order()
         print(" 订单已提交")
         return self
+
+    def add_passengers_fill_fields_and_submit_with_confirm(
+        self, adult=0, child=0, elder=0,
+        name_cn="張三", phone="96526666",
+        email="test@gmail.com", remark="测试备注"
+    ):
+        """
+        完整下单流程：
+        添加乘客 → 填写字段 → 提交订单 → 验证跳转到 confirm-order 页
+        返回 groupId
+        """
+        if not self.order:
+            raise Exception(" 请先调用 goto_order_page()")
+
+        # 1. 添加乘客
+        for _ in range(adult):
+            self.order.click_adult_plus(); time.sleep(0.3)
+        for _ in range(child):
+            self.order.click_child_plus(); time.sleep(0.3)
+        for _ in range(elder):
+            self.order.click_elder_plus(); time.sleep(0.3)
+
+        # 断言数量
+        time.sleep(1)
+        a = self.order.get_adult_count()
+        c = self.order.get_child_count()
+        e = self.order.get_elder_count()
+        assert a >= adult, f"成人数量不符: 期望>={adult}, 实际={a}"
+        assert c >= child, f"兒童数量不符: 期望>={child}, 实际={c}"
+        assert e >= elder, f"長者数量不符: 期望>={elder}, 实际={e}"
+        print(f" 乘客添加完成：成人={a}, 兒童={c}, 長者={e}")
+
+        # 2. 填写下单字段
+        self.order.fill_order_fields(name_cn=name_cn, phone=phone, email=email, remark=remark)
+
+        # 3. 提交订单 + 等待跳转确认页
+        group_id = self.order.click_submit_order_and_wait_confirm()
+
+        # 4. 断言已进入确认页
+        self.order.assert_confirm_order_page()
+
+        print(f" 下单成功，groupId={group_id}")
+        return group_id
