@@ -246,5 +246,5 @@ class BusOrderPayPage:
         current_url = self.driver.current_url
         assert self.CONFIRM_ORDER_URL_CONTAINS in current_url, \
             f"未跳转到订单确认页: {current_url}"
-        print(f" ✅ 订单确认页断言通过: {current_url}")
+        print(f" 订单确认页断言通过: {current_url}")
         return self
