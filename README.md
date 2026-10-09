@@ -41,6 +41,16 @@ Python Projects/
 - **用例层 (test_case)**：调用业务层，结合 CSV 数据驱动，执行多场景断言。
 - **配置层 (conftest等)**：统一驱动管理、前置后置处理，提升代码整洁度。
 
+# 登录态管理
+- session 级专用浏览器登录一次，获取 Cookies
+- function 级 fixture `logged_in_driver` 将 Cookies 注入测试用 driver
+- 支持环境变量 `LOGIN_EMAIL` / `LOGIN_PWD` ，`LOGIN_PHONE` / `LOGIN_PWD` 切换账号
+
+# 防 Stale 策略
+- 所有点击/输入操作每次重新定位元素，不缓存 WebElement
+- 显式等待（WebDriverWait）+ scrollIntoView + JS 兜底点击
+- 关键操作带重试机制
+
 # 技术栈
 - **Python 3.8+** / **Selenium WebDriver**（UI自动化核心）
 - **Pytest**（测试框架与参数化）
@@ -70,3 +80,9 @@ Python Projects/
 2. **执行测试**：`pytest test_case/ -v`
 3. **数据配置**：修改 `data/` 目录下对应 CSV 文件（如登录账号、车票查询条件）。
 4. **CI执行**：推送代码至远程仓库，Jenkins 自动拉取并以无头模式运行。
+
+# 注意事项
+- 本框架仅用于**测试环境**（`testhopetrip.dabapiao.com`），禁止对生产环境执行下单类用例
+- 订单页"提交订单"会真实生成订单，为了避免大量自动化测试数据污染生产SQL，仅能在测试环境运行
+- 如需新增页面，遵循"page → business → testcase"三层顺序
+- 定位器变化优先改 page 层，不要直接改testcase
