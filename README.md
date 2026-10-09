@@ -29,7 +29,7 @@ Python Projects/
 ├── conftest.py         # Pytest全局夹具 (Fixture)，管理浏览器生命周期
 ├── pytest.ini          # Pytest运行配置（标记、插件等）
 ├── operateElement.py   # 基础元素操作封装（显式等待、点击输入等）
-├── Jenkinsfile            # CI/CD流水线定义（无头模式+Allure报告）
+├── Jenkinsfile         # CI/CD流水线定义（无头模式+Allure报告）
 ├── .venv/              # 虚拟环境
 ├── .gitignore          # Git忽略配置（已优化IDE缓存与日志）
 └── README.md
