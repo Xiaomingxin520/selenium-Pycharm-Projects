@@ -3,7 +3,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
 import time
 
-
 class BusOrderPayPage:
     def __init__(self, driver, wait):
         self.driver = driver

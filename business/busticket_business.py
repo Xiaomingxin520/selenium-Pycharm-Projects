@@ -6,7 +6,6 @@ from page.bus_search_result_page import BusSearchResultPage
 from page.bus_orderpay_page import BusOrderPayPage
 import time
 
-
 class BusticketBusiness:
     def __init__(self, driver):
         self.driver = driver

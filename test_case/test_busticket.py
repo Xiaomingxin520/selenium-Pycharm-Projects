@@ -237,7 +237,6 @@ def test_bus_submit_and_confirm_page(logged_in_driver):
     assert group_id.isdigit(), f"groupId 不是数字: {group_id}"
     print(f" 登录态-下单跳转确认页测试通过！groupId={group_id}")
 
-
 @pytest.mark.bus
 @pytest.mark.parametrize("adult,child,elder,case_name", [
     (1, 0, 0, "登录态-只成人-提交跳转"),
