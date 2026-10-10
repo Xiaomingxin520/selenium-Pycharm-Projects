@@ -189,8 +189,8 @@ def test_bus_order_with_fields_adult_only(logged_in_driver):
     biz.goto_order_page()
     biz.add_passengers_fill_fields_and_submit(
         adult=1, child=0, elder=0,
-        name_cn="張三", phone="96526666",
-        email="test@gmail.com", remark="测试备注"
+        name_cn="自動化測試", phone="96526666",
+        email="test@gmail.com", remark="自動化測試備註"
     )
     print(" 登录态-只成人+填写字段+提交 测试通过！")
 
@@ -213,8 +213,8 @@ def test_bus_order_with_fields_combinations(logged_in_driver, adult, child, elde
     biz.goto_order_page()
     biz.add_passengers_fill_fields_and_submit(
         adult=adult, child=child, elder=elder,
-        name_cn="張三", phone="96526666",
-        email="test@gmail.com", remark="测试备注"
+        name_cn="自動化測試", phone="96526666",
+        email="test@gmail.com", remark="自動化測試備註"
     )
     print(f" {case_name} 测试通过！")
 
@@ -229,8 +229,8 @@ def test_bus_submit_and_confirm_page(logged_in_driver):
 
     group_id = biz.add_passengers_fill_fields_and_submit_with_confirm(
         adult=1, child=0, elder=0,
-        name_cn="張三", phone="96526666",
-        email="test@gmail.com", remark="测试备注"
+        name_cn="自動化測試", phone="96526666",
+        email="test@gmail.com", remark="自動化測試備註"
     )
 
     assert group_id is not None, "提交后未获取到 groupId"
@@ -258,8 +258,8 @@ def test_bus_submit_and_confirm_combinations(logged_in_driver, adult, child, eld
 
     group_id = biz.add_passengers_fill_fields_and_submit_with_confirm(
         adult=adult, child=child, elder=elder,
-        name_cn="張三", phone="96526666",
-        email="test@gmail.com", remark="测试备注"
+        name_cn="自動化測試", phone="96526666",
+        email="test@gmail.com", remark="自動化測試備註"
     )
 
     assert group_id is not None, f"{case_name} 提交后未获取到 groupId"
