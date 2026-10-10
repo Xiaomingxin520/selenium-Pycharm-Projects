@@ -3,7 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from page.bus_home_page import BusHomePage
 from page.bus_search_result_page import BusSearchResultPage
-from page.bus_orderpay_page import BusOrderPayPage
+from page.bus_orderconfirmation_page import BusOrderConfirmationPage
 import time
 
 class BusticketBusiness:
@@ -51,7 +51,7 @@ class BusticketBusiness:
     def goto_order_page(self):
         """点击购票 → 等待订单页加载"""
         self.result.click_last_trip_ticket()  # ← 已改防stale版
-        self.order = BusOrderPayPage(self.driver, self.wait)
+        self.order = BusOrderConfirmationPage(self.driver, self.wait)
         self.order.wait_for_page_load()
         return self
 
@@ -138,8 +138,8 @@ class BusticketBusiness:
 
     def add_passengers_fill_fields_and_submit(
             self, adult=0, child=0, elder=0,
-            name_cn="張三", phone="96526666",
-            email="test@gmail.com", remark="测试备注"
+            name_cn="自動化測試", phone="96526666",
+            email="test@gmail.com", remark="自動化測試備註"
     ):
         """完整下单流程：添加乘客 → 填写下单字段 → 提交订单"""
         if not self.order:
@@ -174,8 +174,8 @@ class BusticketBusiness:
 
     def add_passengers_fill_fields_and_submit_with_confirm(
         self, adult=0, child=0, elder=0,
-        name_cn="張三", phone="96526666",
-        email="test@gmail.com", remark="测试备注"
+        name_cn="自動化測試", phone="96526666",
+        email="test@gmail.com", remark="自动化自動化測試備註"
     ):
         """
         完整下单流程：添加乘客 → 填写字段 → 提交订单 → 验证跳转到 confirm-order 页，返回 groupId
