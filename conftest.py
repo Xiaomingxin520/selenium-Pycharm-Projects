@@ -1,231 +1,68 @@
 # conftest.py
 # 作用：1. 提供全局 pytest fixture     2. 每个测试用例独立启动/关闭浏览器      3. 统一浏览器配置、隐式等待、driver 生命周期管理
 # 新增：本地运行 pytest 一切照旧，只新增预设3个环境变量入口，往后有需求接Jenkins直接设变量即可。
+# 优化：清理冗余启动参数，集成 webdriver-manager 自动匹配 Chrome 版本
+# 调整：移除自写测试结果收集，统一由 pytest-json-report 插件输出 JSON（避免格式冲突）
 
-import json
-import os  # 已修改：新增 os 导入（原文件未导入）
+import os
 import pytest
-from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
-#  新增：测试结果收集
-# 用于存储所有通过的用例信息
-PASSED_CASES = []
-# 用于存储所有失败的用例信息
-FAILED_CASES = []
+# 以下自写统计逻辑已禁用，改用 pytest-json-report 插件
+# PASSED_CASES = []
+# FAILED_CASES = []
 
-# function 级 fixture：每个测试用例单独启动一个 Chrome 浏览器，测试结束后自动 quit，防止进程残留
-@pytest.fixture(scope="function")
-def driver(request):
-    # 1. 浏览器启动参数配置
+
+def _get_chromedriver_service():
+    """统一处理 ChromeDriver 路径：优先环境变量，否则自动下载匹配版本"""
+    _driver_path = os.getenv("CHROMEDRIVER_PATH")
+    if _driver_path and os.path.exists(_driver_path):
+        return Service(_driver_path)
+    return Service(ChromeDriverManager().install())
+
+
+def _get_base_options(headless=False):
+    """提取公共 Chrome 启动参数"""
     options = Options()
-    #  已修改：支持命令行参数 + 环境变量双重控制无头模式
-    _headless = (
-        request.config.getoption("--headless", default=False)
-        or os.getenv("HEADLESS", "false").lower() == "true"
-    )
-    if _headless:
+    if headless:
         options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
     else:
         options.add_argument("--start-maximized")
 
-    #  必须关掉，否则会被检测为 Selenium
+    # 防反爬与稳定性参数（去重后保留一份）
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option("useAutomationExtension", False)
-
-    #  禁用沙箱 & GPU（Windows / CI 都稳）
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
-
-    #  防止首次启动慢
     options.add_argument("--disable-extensions")
     options.add_argument("--disable-background-networking")
+    return options
 
-    # 窗口最大化（避免元素不可点击）
-    options.add_argument("--start-maximized")
 
-    # 禁用 GPU 加速（防止部分机器渲染异常）
-    options.add_argument("--disable-gpu")
-
-    # 非沙箱模式（CI / Docker / 服务器环境常用）
-    options.add_argument("--no-sandbox")
-
-    # 解决 Linux / Docker 下共享内存不足问题
-    options.add_argument("--disable-dev-shm-usage")
-
-    # 可选：禁用自动化提示条（更贴近真实用户）
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option("useAutomationExtension", False)
-
-    # 2. 启动 ChromeDriver
-    #  已修改：支持环境变量指定驱动路径，CI 环境设 CHROMEDRIVER_PATH，本地不设置则走默认
-    _driver_path = os.getenv("CHROMEDRIVER_PATH", r"D:\Chromedriver\chromedriver.exe")
-    service = Service(_driver_path)
-    # 实例化 Chrome 浏览器对象
-    driver = webdriver.Chrome(service=service, options=options)
-
-    #  抹掉 navigator.webdriver（防反爬）
-    # 通过 Chrome DevTools Protocol 注入 JavaScript，覆盖 webdriver 属性
-    driver.execute_cdp_cmd(
-        "Page.addScriptToEvaluateOnNewDocument",
-        {
-            "source": "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
-        }
-    )
-
-    # 隐式等待 10 秒
-    driver.implicitly_wait(10)
-
-    # 3. 全局基础配置：打开测试环境
-    #  已修改：支持环境变量配置 BASE_URL，CI 多环境切换
-    _base_url = os.getenv("BASE_URL", "https://www.testhopetrip.dabapiao.com/")
-    driver.get(_base_url)
-    # 显式等待（WebDriverWait）为主，隐式等待为辅：设置为 0，避免与 WebDriverWait 叠加造成 ~20s 超时
-    driver.implicitly_wait(0)
-
-    # 4. 返回 driver 给测试用例
-    yield driver
-
-    # 5. 用例结束，清理资源
-    driver.quit()
-
-#  新增：收集每条用例结果（已优化为中文用例名 + 精简原因）
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    # 获取测试用例的执行结果
-    outcome = yield
-    report = outcome.get_result()
-
-    # 只在测试用例执行阶段（call）进行处理
-    if report.when == "call":
-        #  优先用 allure.title，其次用 docstring，最后用 nodeid 提取用例显示名称
-        display_name = _extract_display_name(item)
-
-        # 判断用例是否通过
-        if report.passed:
-            PASSED_CASES.append({
-                "name": report.nodeid,      # 用例节点 ID
-                "display": display_name     # 用例显示名称
-            })
-        # 判断用例是否失败
-        elif report.failed:
-            # 提取失败原因（精简版）
-            reason = _extract_failure_reason(report)
-            FAILED_CASES.append({
-                "name": report.nodeid,      # 用例节点 ID
-                "display": display_name,    # 用例显示名称
-                "reason": reason            # 失败原因
-            })
-
-#  新增：测试结束后把结果写到一个 JSON 文件（供 testRunner 读取）
-def pytest_sessionfinish(session, exitstatus):
-    # 定义测试结果文件路径
-    result_file = Path("reports/test_result.json")
-    # 确保 reports 目录存在
-    result_file.parent.mkdir(parents=True, exist_ok=True)
-
-    # 将收集到的测试结果写入 JSON 文件
-    json.dump({
-        "passed": PASSED_CASES,   # 通过的用例列表
-        "failed": FAILED_CASES,   # 失败的用例列表
-        "exit_code": exitstatus   # pytest 退出码
-    }, result_file.open("w", encoding="utf-8"), ensure_ascii=False, indent=2)
-
-    # 控制台打印成功写入提示
-    print(f" 测试结果已写入: {result_file}")
-
-def _extract_display_name(item) -> str:
-    """
-    提取中文用例名：
-    1. allure.title
-    2. 函数 docstring
-    3. 参数化 ids
-    4. nodeid 兜底
-    """
-    # 1. allure.title（最优先，通常写在测试用例上方）
-    allure_marker = item.get_closest_marker("allure")
-    if allure_marker and allure_marker.kwargs.get("title"):
-        return allure_marker.kwargs["title"]
-
-    # 2. 函数 docstring（测试用例的文档注释）
-    if item.function.__doc__:
-        return item.function.__doc__.strip().split("\n")[0]
-
-    # 3. 参数化 ids（pytest.mark.parametrize 中定义的 ids）
-    if hasattr(item, "callspec"):
-        raw_id = item.callspec.id
-        if raw_id:
-            return raw_id
-
-    # 4. nodeid 兜底（去掉路径和函数名，保留参数部分）
-    name = item.nodeid.split("::")[-1]
-    if "[" in name:
-        name = name.split("[")[-1].rstrip("]")
-    return name
-
-def _extract_failure_reason(report) -> str:
-    """
-    只取第一行 AssertionError，去掉堆栈和 chromedriver 日志
-    """
-    # 如果没有长报告（异常信息），返回未知错误
-    if not report.longrepr:
-        return "未知错误"
-
-    # reprcrash.message 是最干净的断言信息（通常是我们 assert 后面的描述）
-    if hasattr(report.longrepr, "reprcrash") and report.longrepr.reprcrash.message:
-        msg = report.longrepr.reprcrash.message
-        # 如果信息过长，进行截断
-        return msg[:120] + "..." if len(msg) > 120 else msg
-
-    # 兜底：取最后一行（通常是最核心的错误信息）
-    lines = str(report.longrepr).strip().split("\n")
-    # 如果最后一行过长，进行截断
-    return lines[-1][:120] + "..." if len(lines[-1]) > 120 else lines[-1]
-
-def pytest_addoption(parser):
-    parser.addoption(
-        "--headless",
-        action="store_true",
-        default=False,
-        help="启用无头模式（CI 使用）"
-    )
-
-# ============================================================
-#  新增：登录态管理（session 级登录一次，所有用例共享 Cookie）
-# 使用方式：测试用例参数写 `logged_in_driver` 即可自动带登录态
-# 账号密码通过环境变量或默认值传入，不污染现有 driver fixture
-# ============================================================
-
-@pytest.fixture(scope="session")
-def _login_driver():
-    """
-    session 级专用浏览器：只开一次，专门用来登录拿 Cookie
-    """
-    from selenium import webdriver
-    from selenium.webdriver.chrome.service import Service
-    from selenium.webdriver.chrome.options import Options
-    import os
-
-    options = Options()
-    options.add_argument("--start-maximized")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option("useAutomationExtension", False)
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--disable-dev-shm-usage")
-
-    _driver_path = os.getenv("CHROMEDRIVER_PATH", r"D:\Chromedriver\chromedriver.exe")
-    service = Service(_driver_path)
-    driver = webdriver.Chrome(service=service, options=options)
-
+def _anti_detect(driver):
+    """抹掉 navigator.webdriver（防反爬）"""
     driver.execute_cdp_cmd(
         "Page.addScriptToEvaluateOnNewDocument",
         {"source": "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"}
     )
+
+
+@pytest.fixture(scope="function")
+def driver(request):
+    _headless = (
+            request.config.getoption("--headless", default=False)
+            or os.getenv("HEADLESS", "false").lower() == "true"
+    )
+    options = _get_base_options(headless=_headless)
+    service = _get_chromedriver_service()
+    driver = webdriver.Chrome(service=service, options=options)
+
+    _anti_detect(driver)
     driver.implicitly_wait(10)
 
     _base_url = os.getenv("BASE_URL", "https://www.testhopetrip.dabapiao.com/")
@@ -233,16 +70,45 @@ def _login_driver():
     driver.implicitly_wait(0)
 
     yield driver
+    driver.quit()
 
+
+# ========== 以下 hook 已禁用，改用 pytest-json-report 插件 ==========
+# @pytest.hookimpl(hookwrapper=True)
+# def pytest_runtest_makereport(item, call):
+#     ...
+#
+# def pytest_sessionfinish(session, exitstatus):
+#     ...（自写 JSON 逻辑已移除）
+# =================================================================
+
+
+def pytest_addoption(parser):
+    parser.addoption("--headless", action="store_true", default=False, help="启用无头模式（CI 使用）")
+
+
+# ========== 登录态管理 ==========
+@pytest.fixture(scope="session")
+def _login_driver():
+    """session 级专用浏览器：只开一次，专门用来登录拿 Cookie"""
+    options = _get_base_options(headless=False)
+    service = _get_chromedriver_service()
+    driver = webdriver.Chrome(service=service, options=options)
+
+    _anti_detect(driver)
+    driver.implicitly_wait(10)
+
+    _base_url = os.getenv("BASE_URL", "https://www.testhopetrip.dabapiao.com/")
+    driver.get(_base_url)
+    driver.implicitly_wait(0)
+
+    yield driver
     driver.quit()
 
 
 @pytest.fixture(scope="session")
 def login_cookies(_login_driver):
-    """
-    session 级：用专用浏览器登录一次，返回 cookies
-    调用 LoginBusiness.loginBusiness() 静态方法（非实例化）
-    """
+    """session 级：用专用浏览器登录一次，返回 cookies"""
     from business.login_business import LoginBusiness
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
@@ -252,7 +118,6 @@ def login_cookies(_login_driver):
     _email = os.getenv("LOGIN_EMAIL", "test@gmail.com")
     _pwd = os.getenv("LOGIN_PWD", "123456")
 
-    #  关键修正：调用静态方法，不是实例化
     LoginBusiness.loginBusiness(
         driver=_login_driver,
         email=_email,
@@ -260,7 +125,6 @@ def login_cookies(_login_driver):
         login_mode="email"
     )
 
-    # 显式等待登录成功标志
     try:
         WebDriverWait(_login_driver, 15).until(
             EC.presence_of_element_located(
@@ -274,7 +138,6 @@ def login_cookies(_login_driver):
     except Exception as e:
         print(f"  登录成功标志等待超时（将使用当前已有 Cookie）: {e}")
 
-    # 等 Session Cookie 种完
     time.sleep(1)
     cookies = _login_driver.get_cookies()
     print(f"  登录态已建立，共 {len(cookies)} 个 Cookie")
@@ -283,10 +146,7 @@ def login_cookies(_login_driver):
 
 @pytest.fixture(scope="function")
 def logged_in_driver(driver, login_cookies):
-    """
-    function 级：在测试用 driver 基础上注入登录态 Cookie
-    不影响原有 driver fixture，两者可共存
-    """
+    """function 级：在测试用 driver 基础上注入登录态 Cookie"""
     driver.delete_all_cookies()
     for cookie in login_cookies:
         cookie = dict(cookie)
