@@ -164,7 +164,7 @@ class BusOrderConfirmationPage:
         """填写手机号"""
         self._safe_send_keys(self.phone_input, phone, "手机号")
 
-    def fill_email(self, email="test@gmail.com"):
+    def fill_email(self, email="AutomatedTesting@gmail.com"):
         """填写邮箱"""
         self._safe_send_keys(self.email_input, email, "邮箱")
 
@@ -173,7 +173,7 @@ class BusOrderConfirmationPage:
         self._safe_send_keys(self.remark_textarea, remark, "备注")
 
     def fill_order_fields(self, name_cn="自动化测试", phone="96526666",
-                         email="test@gmail.com", remark="自動化測試備註"):
+                         email="AutomatedTesting@gmail.com", remark="自動化測試備註"):
         """
         统一填写所有下单字段（完整链路）：中文名 → 中转英（自动回填姓/名拼音）→ 手机号 → 邮箱 → 备注
         """

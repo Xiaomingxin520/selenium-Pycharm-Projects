@@ -3,7 +3,6 @@
 import argparse
 import datetime
 import json
-import os
 import shutil
 import subprocess
 import time
@@ -13,7 +12,7 @@ import requests
 import pytest
 
 # ====================== 全局常量 ======================
-BASE_PROJECT_NAME = "港版大巴票下单自动化测试"   # 模块名称
+BASE_PROJECT_NAME = "港版项目自动化测试"   # 模块名称
 REPORT_HTML_DIR = Path("reports/html")   # 最终生成的 Allure HTML 报告固定目录
 REPORT_HISTORY_DIR = Path("reports/allure-history/history")   # Allure 历史趋势数据目录
 RESULT_JSON = Path("reports/test_result.json")   # pytest 执行后生成的测试结果 JSON 文件
@@ -36,18 +35,18 @@ def generate_timestamp() -> str:
 def create_environment_properties(raw_dir: Path, module_name: str) -> None:
     env_file = raw_dir / "environment.properties"
     env_content = f"""projectName={BASE_PROJECT_NAME} - {module_name}
-pythonVersion=3.8.5
-allureVersion={ALLURE_VERSION}
-baseUrl={BASE_URL}
-executionTime={time.strftime("%Y-%m-%d %H:%M:%S")}
-author=Test_Team
-osName={platform.system()}
-osVersion={platform.release()}
-browserName=Chrome
-browserVersion=auto
-browserSize=1920x1080
-module={module_name}
-"""
+    pythonVersion=3.8.5
+    allureVersion={ALLURE_VERSION}
+    baseUrl={BASE_URL}
+    executionTime={time.strftime("%Y-%m-%d %H:%M:%S")}
+    author=Test_Team
+    osName={platform.system()}
+    osVersion={platform.release()}
+    browserName=Chrome
+    browserVersion=auto
+    browserSize=1920x1080
+    module={module_name}
+    """
     env_file.write_text(env_content, encoding="utf-8-sig")
 
 def copy_history_to_raw(raw_dir: Path) -> None:

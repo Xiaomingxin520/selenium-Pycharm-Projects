@@ -23,9 +23,9 @@ TC_LOGIN_021,Py_Hopetrip_21,password,853,,,123456,FALSE,空澳门地区的手机
 TC_LOGIN_022,Py_Hopetrip_22,password,853,65202623666666,,123456,FALSE,超长格式澳门手机号+正确密码登录失败,請輸入正確的地區號和手機號
 TC_LOGIN_023,Py_Hopetrip_23,password,853,652,,123456,FALSE,超短格式澳门手机号+正确密码登录失败,請輸入正確的地區號和手機號
 TC_LOGIN_024,Py_Hopetrip_24,password,853,96526666,,123456,FALSE,错误区号手机号+正确密码登录失败,請輸入正確的地區號和手機號
-TC_LOGIN_025,Py_Hopetrip_25,password,,,Test@gmail.com,123456,TRUE,电邮+正确密码登录成功,登入成功
-TC_LOGIN_026,Py_Hopetrip_26,password,,,Test@gmail.com,654321,FALSE,电邮+错误密码登录失败,登入失敗，郵箱/密碼錯誤
-TC_LOGIN_027,Py_Hopetrip_27,password,,,Test@gmail.com,,FALSE,电邮+空密码登录失败,請輸入密碼
+TC_LOGIN_025,Py_Hopetrip_25,password,,,AutomatedTesting@gmail.com,123456,TRUE,电邮+正确密码登录成功,登入成功
+TC_LOGIN_026,Py_Hopetrip_26,password,,,AutomatedTesting@gmail.com,654321,FALSE,电邮+错误密码登录失败,登入失敗，郵箱/密碼錯誤
+TC_LOGIN_027,Py_Hopetrip_27,password,,,AutomatedTesting@gmail.com,,FALSE,电邮+空密码登录失败,請輸入密碼
 TC_LOGIN_028,Py_Hopetrip_28,password,,,Test@gmail,123456,FALSE,错误格式的电邮+密码登录失败,請輸入正確的電子郵箱
 TC_LOGIN_029,Py_Hopetrip_29,password,,,,123456,FALSE,空电邮+密码登录失败,請輸入正確的電子郵箱
 TC_LOGIN_030,Py_Hopetrip_30,password,,,,,FALSE,空电邮+空密码登录失败,請輸入正確的電子郵箱

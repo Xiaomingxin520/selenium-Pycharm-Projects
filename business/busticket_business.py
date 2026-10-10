@@ -107,7 +107,7 @@ class BusticketBusiness:
         return self
 
     # ========== 登录态下单==========
-    def login_and_goto_order(self, email="test@gmail.com", pwd="123456"):
+    def login_and_goto_order(self, email="AutomatedTesting@gmail.com", pwd="123456"):
         """
         登录态场景统一入口：登录 → 搜索 → 弹窗 → 订单页
         复用已有 LoginBusiness，不重复造轮子
@@ -127,7 +127,7 @@ class BusticketBusiness:
         self.goto_order_page()
         return self
 
-    def login_and_add_passengers_and_submit(self, email="test@gmail.com", pwd="123456",
+    def login_and_add_passengers_and_submit(self, email="AutomatedTesting@gmail.com", pwd="123456",
                                             adult=0, child=0, elder=0):
         """
         登录态场景：一步到位（登录 → 搜索 → 选座 → 添加乘客 → 提交），适合测试用例直接调用，减少重复编排
@@ -139,7 +139,7 @@ class BusticketBusiness:
     def add_passengers_fill_fields_and_submit(
             self, adult=0, child=0, elder=0,
             name_cn="自動化測試", phone="96526666",
-            email="test@gmail.com", remark="自動化測試備註"
+            email="AutomatedTesting@gmail.com", remark="自動化測試備註"
     ):
         """完整下单流程：添加乘客 → 填写下单字段 → 提交订单"""
         if not self.order:
@@ -175,7 +175,7 @@ class BusticketBusiness:
     def add_passengers_fill_fields_and_submit_with_confirm(
         self, adult=0, child=0, elder=0,
         name_cn="自動化測試", phone="96526666",
-        email="test@gmail.com", remark="自动化自動化測試備註"
+        email="AutomatedTesting@gmail.com", remark="自动化自動化測試備註"
     ):
         """
         完整下单流程：添加乘客 → 填写字段 → 提交订单 → 验证跳转到 confirm-order 页，返回 groupId

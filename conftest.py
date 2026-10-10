@@ -110,7 +110,7 @@ def login_cookies(_login_driver):
     from selenium.webdriver.common.by import By
     import time
 
-    _email = os.getenv("LOGIN_EMAIL", "test@gmail.com")
+    _email = os.getenv("LOGIN_EMAIL", "AutomatedTesting@gmail.com")
     _pwd = os.getenv("LOGIN_PWD", "123456")
 
     LoginBusiness.loginBusiness(
