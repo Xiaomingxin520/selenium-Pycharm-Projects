@@ -11,11 +11,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
-# 以下自写统计逻辑已禁用，改用 pytest-json-report 插件
-# PASSED_CASES = []
-# FAILED_CASES = []
-
-
 def _get_chromedriver_service():
     """统一处理 ChromeDriver 路径：优先环境变量，否则自动下载匹配版本"""
     _driver_path = os.getenv("CHROMEDRIVER_PATH")
