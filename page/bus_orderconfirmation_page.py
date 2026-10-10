@@ -1,9 +1,11 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import StaleElementReferenceException
 import time
 
-class BusOrderPayPage:
+from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+
+
+class BusOrderConfirmationPage:
     def __init__(self, driver, wait):
         self.driver = driver
         self.wait = wait
@@ -134,7 +136,7 @@ class BusOrderPayPage:
                 print(f"  {field_name} stale，重试 {attempt + 1}/3")
                 time.sleep(0.5)
 
-    def fill_chinese_name(self, name_cn="張三"):
+    def fill_chinese_name(self, name_cn="自動化測試"):
         """填写中文名"""
         self._safe_send_keys(self.chinese_name_input, name_cn, "中文名")
 
@@ -166,12 +168,12 @@ class BusOrderPayPage:
         """填写邮箱"""
         self._safe_send_keys(self.email_input, email, "邮箱")
 
-    def fill_remark(self, remark="测试备注"):
+    def fill_remark(self, remark="自動化測試備註"):
         """填写备注"""
         self._safe_send_keys(self.remark_textarea, remark, "备注")
 
-    def fill_order_fields(self, name_cn="張三", phone="96526666",
-                         email="test@gmail.com", remark="测试备注"):
+    def fill_order_fields(self, name_cn="自动化测试", phone="96526666",
+                         email="test@gmail.com", remark="自動化測試備註"):
         """
         统一填写所有下单字段（完整链路）：中文名 → 中转英（自动回填姓/名拼音）→ 手机号 → 邮箱 → 备注
         """
@@ -218,7 +220,6 @@ class BusOrderPayPage:
 
     def _extract_group_id_from_url(self, url=None):
         """从 confirm-order?groupId=xxx 的 URL 中提取 groupId"""
-        import re
         from urllib.parse import urlparse, parse_qs
 
         target_url = url or self.driver.current_url
