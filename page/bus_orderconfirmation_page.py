@@ -199,11 +199,9 @@ class BusOrderConfirmationPage:
             btn.click()
         except Exception:
             self.driver.execute_script("arguments[0].click();", btn)
-
         print(" 已点击提交订单，等待跳转确认页...")
 
-        # 等待 URL 包含 confirm-order（groupId 动态，不硬编码）
-        self.wait.until(EC.url_contains(self.CONFIRM_ORDER_URL_CONTAINS))
+        self.wait.until(EC.url_contains(self.CONFIRM_ORDER_URL_CONTAINS))  # 等待 URL 包含 confirm-order（groupId 动态，不硬编码）
         time.sleep(1)  # 等页面稳定
 
         current_url = self.driver.current_url
@@ -215,7 +213,6 @@ class BusOrderConfirmationPage:
             print(f"  提取到 groupId: {group_id}")
         else:
             print("  ⚠️ 未能从 URL 中提取 groupId")
-
         return group_id
 
     def _extract_group_id_from_url(self, url=None):

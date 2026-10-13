@@ -11,7 +11,6 @@ def test_bus_select_depart_station(driver):
     """
     biz = BusticketBusiness(driver)
 
-    # 当前仅传出发地，到达地/日期等后续待补全（business层已留好占位）
     biz.enter_bus_and_search(
         depart_city="深圳",
         depart_station="深圳灣（香港段上）",
@@ -19,29 +18,23 @@ def test_bus_select_depart_station(driver):
         arrive_station="尖沙咀海港城"
     )
 
-    # 校验 URL 带 date=当天+2
     expected_date = biz.target_date
     if not expected_date:
         expected_date = (datetime.today() + timedelta(days=2)).strftime("%Y-%m-%d")
 
     current_url = driver.current_url
-
-    # 兼容 URL 中可能含其他参数，仅校验包含
     assert f"date={expected_date}" in current_url, \
         f"URL缺少日期参数: 期望 date={expected_date}, 实际 {current_url}"
     print(f"日期校验通过: date={expected_date}")
 
-    # 上車點弹窗 → 取消
     biz.result.click_last_trip_map()
     assert biz.result.assert_map_modal()
     biz.result.close_map_modal()
 
-    # 下車點弹窗 → 取消
     biz.result.click_last_trip_down_map()
     assert biz.result.assert_down_map_modal()
     biz.result.close_map_modal()
 
-    # 点击购票
     biz.result.click_last_trip_ticket()
     assert "create-order" in driver.current_url, " 未跳转到下单页"
     print(" 购票跳转断言通过！")
@@ -84,15 +77,12 @@ def test_bus_select_depart_station(driver):
 # ])
 # def test_bus_passenger_combinations(driver, adult, child, elder, case_name):
 #     print(f"\n 场景: {case_name} | 成人={adult}, 兒童={child}, 長者={elder}")
-#
 #     biz = BusticketBusiness(driver)
 #     biz.enter_bus_and_search()
 #     biz.handle_map_modals()
 #     biz.goto_order_page()
 #     biz.add_passengers_and_submit(adult=adult, child=child, elder=elder)
-#
 #     print(f" {case_name} 场景测试通过！")
-
 
 # ========== 后续接 CSV 时，只需改这里 ==========
 # @pytest.mark.bus
@@ -120,7 +110,6 @@ def test_bus_select_depart_station_with_login(logged_in_driver):
         arrive_station="尖沙咀海港城"
     )
 
-    # 校验 URL 带 date=当天+2
     expected_date = biz.target_date
     if not expected_date:
         expected_date = (datetime.today() + timedelta(days=2)).strftime("%Y-%m-%d")
@@ -130,17 +119,14 @@ def test_bus_select_depart_station_with_login(logged_in_driver):
         f"URL缺少日期参数: 期望 date={expected_date}, 实际 {current_url}"
     print(f" 登录态-日期校验通过: date={expected_date}")
 
-    # 上車點弹窗 → 取消
     biz.result.click_last_trip_map()
     assert biz.result.assert_map_modal()
     biz.result.close_map_modal()
 
-    # 下車點弹窗 → 取消
     biz.result.click_last_trip_down_map()
     assert biz.result.assert_down_map_modal()
     biz.result.close_map_modal()
 
-    # 点击购票
     biz.result.click_last_trip_ticket()
     assert "create-order" in logged_in_driver.current_url, " 未跳转到下单页"
     print(" 登录态-购票跳转断言通过！")
@@ -159,13 +145,11 @@ def test_bus_select_depart_station_with_login(logged_in_driver):
 def test_bus_passenger_combinations_with_login(logged_in_driver, adult, child, elder, case_name):
     """登录态：8组乘客组合参数化下单"""
     print(f"\n 登录态场景: {case_name} | 成人={adult}, 兒童={child}, 長者={elder}")
-
     biz = BusticketBusiness(logged_in_driver)
     biz.enter_bus_and_search()
     biz.handle_map_modals()
     biz.goto_order_page()
     biz.add_passengers_and_submit(adult=adult, child=child, elder=elder)
-
     print(f" 登录态-{case_name} 场景测试通过！")
 
 # ========== 登录态 CSV 数据驱动（后续启用，取消注释即可）==========
@@ -218,7 +202,6 @@ def test_bus_order_with_fields_combinations(logged_in_driver, adult, child, elde
     )
     print(f" {case_name} 测试通过！")
 
-# 验证跳转confirm-order
 @pytest.mark.bus
 def test_bus_submit_and_confirm_page(logged_in_driver):
     """登录态：1成人下单，提交后验证跳转到 confirm-order 确认页"""
@@ -250,7 +233,6 @@ def test_bus_submit_and_confirm_page(logged_in_driver):
 def test_bus_submit_and_confirm_combinations(logged_in_driver, adult, child, elder, case_name):
     """登录态：各乘客组合 → 提交 → 验证跳转 confirm-order"""
     print(f"\n 场景: {case_name} | 成人={adult}, 兒童={child}, 長者={elder}")
-
     biz = BusticketBusiness(logged_in_driver)
     biz.enter_bus_and_search()
     biz.handle_map_modals()
@@ -264,3 +246,76 @@ def test_bus_submit_and_confirm_combinations(logged_in_driver, adult, child, eld
 
     assert group_id is not None, f"{case_name} 提交后未获取到 groupId"
     print(f" {case_name} 提交跳转测试通过！groupId={group_id}")
+
+# ==================== 支付码生成专项用例（按指定顺序：①港微→②港支→③陆微→④陆支）====================
+
+@pytest.mark.bus
+def test_bus_pay_01_hk_wechat_generate_qrcode(logged_in_driver):
+    """① 香港微信支付：选择 → 生成支付码 → 验证（用例结束）"""
+    from page.bus_orderpay_page import BusOrderPayPage
+    biz = BusticketBusiness(logged_in_driver)
+    biz.enter_bus_and_search(
+        depart_city="深圳", depart_station="深圳灣（香港段上）",
+        arrive_city="香港", arrive_station="尖沙咀海港城"
+    )
+    biz.handle_map_modals()
+    biz.goto_order_page()
+    biz.add_passengers_fill_fields_and_submit_with_confirm(adult=1)
+
+    result = BusOrderPayPage.pay(logged_in_driver, "香港微信支付")
+    assert result["qrcode_displayed"], "香港微信支付码未生成"
+    print("① 香港微信支付码生成成功 ✓")
+
+
+@pytest.mark.bus
+def test_bus_pay_02_hk_alipay_generate_qrcode(logged_in_driver):
+    """② 香港支付寶：选择 → 生成支付码 → 验证（用例结束）"""
+    from page.bus_orderpay_page import BusOrderPayPage
+    biz = BusticketBusiness(logged_in_driver)
+    biz.enter_bus_and_search(
+        depart_city="深圳", depart_station="深圳灣（香港段上）",
+        arrive_city="香港", arrive_station="尖沙咀海港城"
+    )
+    biz.handle_map_modals()
+    biz.goto_order_page()
+    biz.add_passengers_fill_fields_and_submit_with_confirm(adult=1)
+
+    result = BusOrderPayPage.pay(logged_in_driver, "香港支付寶")
+    assert result["qrcode_displayed"], "香港支付寶支付码未生成"
+    print("② 香港支付寶支付码生成成功 ✓")
+
+
+@pytest.mark.bus
+def test_bus_pay_03_cn_wechat_generate_qrcode(logged_in_driver):
+    """③ 大陸微信支付：选择 → 生成支付码 → 验证（用例结束）"""
+    from page.bus_orderpay_page import BusOrderPayPage
+    biz = BusticketBusiness(logged_in_driver)
+    biz.enter_bus_and_search(
+        depart_city="深圳", depart_station="深圳灣（香港段上）",
+        arrive_city="香港", arrive_station="尖沙咀海港城"
+    )
+    biz.handle_map_modals()
+    biz.goto_order_page()
+    biz.add_passengers_fill_fields_and_submit_with_confirm(adult=1)
+
+    result = BusOrderPayPage.pay(logged_in_driver, "大陸微信支付")
+    assert result["qrcode_displayed"], "大陸微信支付码未生成"
+    print("③ 大陸微信支付码生成成功 ✓")
+
+
+@pytest.mark.bus
+def test_bus_pay_04_cn_alipay_generate_qrcode(logged_in_driver):
+    """④ 大陸支付寶：选择 → 生成支付码 → 验证（用例结束）"""
+    from page.bus_orderpay_page import BusOrderPayPage
+    biz = BusticketBusiness(logged_in_driver)
+    biz.enter_bus_and_search(
+        depart_city="深圳", depart_station="深圳灣（香港段上）",
+        arrive_city="香港", arrive_station="尖沙咀海港城"
+    )
+    biz.handle_map_modals()
+    biz.goto_order_page()
+    biz.add_passengers_fill_fields_and_submit_with_confirm(adult=1)
+
+    result = BusOrderPayPage.pay(logged_in_driver, "大陸支付寶")
+    assert result["qrcode_displayed"], "大陸支付寶支付码未生成"
+    print("④ 大陸支付寶支付码生成成功 ✓")
