@@ -215,7 +215,7 @@ class BusHomePage:
         except TimeoutException:
             pass
 
-        # 用正确的 testid 定位
+        # 用正确的testid定位
         btn = self.wait.until(EC.presence_of_element_located(
             (By.XPATH, "//*[@data-testid='bus-btn-search']")
         ))
