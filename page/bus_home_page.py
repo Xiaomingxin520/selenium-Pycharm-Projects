@@ -11,7 +11,7 @@ HONGKONG_CITY_ID = "2"
 SHENZHEN_WAN_STATION_ID = "200006"
 TIANSHAJIE_STATION_ID = "300282"
 
-# 日期选择器相关（Ant Design）
+# 车票日期选择器相关（Ant Design）
 DATE_PICKER_TRIGGER = "div.ant-picker"  # 或更精准的出发日期 trigger
 DATE_DROPDOWN = "div.ant-picker-dropdown:not(.ant-picker-dropdown-hidden)"
 DATE_CELL = "//td[contains(@class,'ant-picker-cell') and @title='{date}']"
