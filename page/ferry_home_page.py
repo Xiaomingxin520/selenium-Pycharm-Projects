@@ -26,47 +26,57 @@ class ferryHomePage:
         self.wait = WebDriverWait(driver, 10)
 
     def select_depart_city_station(self, depart_city="深圳", depart_port="深圳蛇口碼頭"):
-        """
-        选择船票出发城市 + 码头
-        """
+        """选择船票出发城市 + 码头"""
 
-        # 步骤1：点击出发地 trigger
+        # ===== 步骤1：点出发 trigger（唯一元素 + 原生 click）=====
         trigger = self.wait.until(EC.element_to_be_clickable(
             (By.XPATH,
-             "//div[@data-testid='ferry-go-depart-city-trigger' and contains(@class,'cursor-pointer')] | "
-             "//div[@data-testid='ferry-go-depart-city-trigger']//*[name()='svg']")
+             "(//div[@data-testid='ferry-go-depart-city-trigger'])[1]")
         ))
-        trigger.click()
+        trigger.click()          # ← 不再用 execute_script
+        print("✅ 点击出发地 trigger")
 
-        # 等待弹窗渲染
-        time.sleep(1)
+        # 等弹窗出现
+        modal_xpath = "//div[@data-testid='ferry-go-depart-city-modal']"
+        self.wait.until(EC.visibility_of_element_located((By.XPATH, modal_xpath)))
+        time.sleep(0.4)
 
-        # 步骤2：点击左侧城市
-        city_el = self.wait.until(EC.element_to_be_clickable(
-            (By.XPATH,
-             f"//div[@data-testid='ferry-go-depart-city-modal']"
-             f"//li[(@data-city-id='{SHENZHEN_CITY_ID}' or text()='{depart_city}') "
-             f"and contains(@class,'cursor-pointer')] | "
-             f"//div[@data-testid='ferry-go-depart-city-modal']"
-             f"//div[text()='{depart_city}' and contains(@class,'cursor-pointer')]")
-        ))
+        # ===== 步骤2：左侧城市（精确文本，避免误伤右侧"深圳蛇口碼頭"）=====
+        city_xpath = (
+            f"({modal_xpath}//li[@data-city-id='{SHENZHEN_CITY_ID}'])[1] | "
+            f"({modal_xpath}//*[normalize-space(text())='{depart_city}' and "
+            f"contains(@class,'cursor-pointer')])[1]"
+        )
+        city_el = self.wait.until(EC.element_to_be_clickable((By.XPATH, city_xpath)))
         city_el.click()
+        print(f"✅ 选出发城市: {depart_city}")
+        time.sleep(0.8)   # 右侧码头是联动接口，多给一点
 
-        # 等右侧码头列表渲染
+        # ===== ★ 调试打印：现在才看得到 =====
+        print("🔍 弹窗内码头相关节点：")
+        for el in self.driver.find_elements(By.XPATH, f"{modal_xpath}//*[@data-port-id or text()]"):
+            t = (el.text or "").strip()
+            pid = el.get_attribute("data-port-id") or ""
+            if pid or "碼頭" in t or depart_port in t:
+                print(f"   <{el.tag_name}> port={pid} city={el.get_attribute('data-city-id')} text='{t}'")
+
+        # ===== 步骤3：先等码头文本出现，再点 =====
+        self.wait.until(EC.presence_of_element_located(
+            (By.XPATH, f"{modal_xpath}//*[contains(text(),'{depart_port}')]")))
+        time.sleep(0.2)
+
+        station_xpath = (
+            f"({modal_xpath}//*[@data-port-id='{SHENZHEN_SHEKOU_PORT_ID}'])[1] | "
+            f"({modal_xpath}//*[contains(text(),'{depart_port}') and "
+            f"contains(@class,'cursor-pointer')])[1] | "
+            f"({modal_xpath}//*[contains(text(),'{depart_port}')]/ancestor-or-self::*[contains(@class,'cursor-pointer')][1])[1]"
+        )
+        station_el = self.wait.until(EC.element_to_be_clickable((By.XPATH, station_xpath)))
+        station_el.click()
+        print(f"✅ 选出发码头: {depart_port}")
         time.sleep(0.5)
 
-        # 步骤3：点击右侧码头
-        station_el = self.wait.until(EC.element_to_be_clickable(
-            (By.XPATH,
-             f"//div[@data-testid='ferry-go-depart-city-modal']"
-             f"//span[(@data-port-id='{SHENZHEN_SHEKOU_PORT_ID}' or contains(text(),'{depart_port}')) "
-             f"and contains(@class,'cursor-pointer')] | "
-             f"//div[@data-testid='ferry-go-depart-city-modal']"
-             f"//li[contains(text(),'{depart_port}') and contains(@class,'cursor-pointer')]")
-        ))
-        station_el.click()
-
-    def select_arrive_city_station(self, arrive_city="香港", arrive_port="香港機場海天碼頭",
+    def select_arrive_city_station(self, arrive_city="香港", arrive_port="香港國際機場海天碼頭",
                                    depart_city_keep="深圳", depart_station_keep="深圳蛇口碼頭"):
         #  用 testid 而不是写死文本
         depart_display_xpath = "//div[@data-testid='ferry-go-depart-city-trigger']//div[contains(@class,'cursor-pointer')]"
@@ -85,7 +95,7 @@ class ferryHomePage:
                 (By.XPATH, "//div[@data-testid='ferry-go-arrive-city-trigger']")
             ))
         self.driver.execute_script("arguments[0].scrollIntoView({block:'center'});", arrive_trigger)
-        self.driver.execute_script("arguments[0].click();", arrive_trigger)
+        arrive_trigger.click()
         print(" 点击到达触发框(船票)")
 
         # 等弹窗出现
