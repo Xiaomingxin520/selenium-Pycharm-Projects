@@ -1,4 +1,4 @@
-# business/ferryticket_business.py
+# business/ferryticket_business.py  船票业务调用层
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -13,7 +13,6 @@ SHENZHEN_CITY_ID = "133"
 HONGKONG_CITY_ID = "2"
 SHENZHEN_SHEKOU_PORT_ID = "900045"
 HONGKONG_AIRPORT_PORT_ID = "900054"
-
 
 class FerryTicketBusiness:
     def __init__(self, driver: webdriver.Chrome):

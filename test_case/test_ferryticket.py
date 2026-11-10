@@ -1,3 +1,5 @@
+# test_case/test_ferryticket.py  船票测试用例层
+
 import pytest
 import time
 from datetime import datetime, timedelta
@@ -44,11 +46,9 @@ def driver():
     yield d
     d.quit()
 
-
 @pytest.fixture(scope="module")
 def ferry_biz(driver):
     return FerryTicketBusiness(driver)
-
 
 def test_01_select_depart_and_arrive(ferry_biz, driver):
     ferry_biz.select_ferry_route(
@@ -86,9 +86,9 @@ def test_02_select_date_and_search(ferry_biz, driver):
     time.sleep(0.3)
 
     try:
-        btn.click()  # ✅ 优先原生
+        btn.click()  #  优先原生
     except Exception:
-        driver.execute_script(  # ✅ 安全 JS 兜底
+        driver.execute_script(  #  安全 JS 兜底
             "var e=arguments[0]; if(e && e.click){e.click();} else if(e && e.length){e[0].click();}",
             btn
         )

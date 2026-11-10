@@ -34,7 +34,7 @@ class ferryHomePage:
              "(//div[@data-testid='ferry-go-depart-city-trigger'])[1]")
         ))
         trigger.click()          # ← 不再用 execute_script
-        print("✅ 点击出发地 trigger")
+        print(" 点击出发地 trigger")
 
         # 等弹窗出现
         modal_xpath = "//div[@data-testid='ferry-go-depart-city-modal']"
@@ -49,11 +49,11 @@ class ferryHomePage:
         )
         city_el = self.wait.until(EC.element_to_be_clickable((By.XPATH, city_xpath)))
         city_el.click()
-        print(f"✅ 选出发城市: {depart_city}")
+        print(f" 选出发城市: {depart_city}")
         time.sleep(0.8)   # 右侧码头是联动接口，多给一点
 
         # ===== ★ 调试打印：现在才看得到 =====
-        print("🔍 弹窗内码头相关节点：")
+        print(" 弹窗内码头相关节点：")
         for el in self.driver.find_elements(By.XPATH, f"{modal_xpath}//*[@data-port-id or text()]"):
             t = (el.text or "").strip()
             pid = el.get_attribute("data-port-id") or ""
@@ -73,7 +73,7 @@ class ferryHomePage:
         )
         station_el = self.wait.until(EC.element_to_be_clickable((By.XPATH, station_xpath)))
         station_el.click()
-        print(f"✅ 选出发码头: {depart_port}")
+        print(f" 选出发码头: {depart_port}")
         time.sleep(0.5)
 
     def select_arrive_city_station(self, arrive_city="香港", arrive_port="香港國際機場海天碼頭",
