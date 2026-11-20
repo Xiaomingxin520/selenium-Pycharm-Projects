@@ -45,7 +45,7 @@ class ferryHomePage:
             f"contains(@class,'cursor-pointer')])[1]"
         )
         city_el = self.page.locator(city_xpath).first
-        expect(city_el).to_be_clickable()
+        city_el.scroll_into_view_if_needed()
         city_el.click()
         print(f" 选出发城市: {depart_city}")
         # 移除 time.sleep(0.8)，接口联动由后续断言等待
@@ -71,7 +71,7 @@ class ferryHomePage:
             f"({modal_xpath}//*[contains(text(),'{depart_port}')]/ancestor-or-self::*[contains(@class,'cursor-pointer')][1])[1]"
         )
         station_el = self.page.locator(station_xpath).first
-        expect(station_el).to_be_clickable()
+        expect(station_el).to_be_visible(timeout=10_000)
         station_el.click()
         print(f" 选出发码头: {depart_port}")
         # 移除 time.sleep(0.5)
@@ -87,8 +87,7 @@ class ferryHomePage:
         # 点击到达触发框
         arrive_trigger_xpath = "//div[@data-testid='ferry-go-arrive-city-trigger']//div[contains(@class,'cursor-pointer')]"
         arrive_trigger = self.page.locator(arrive_trigger_xpath).first
-        expect(arrive_trigger).to_be_clickable(timeout=10000)
-
+        expect(arrive_trigger).to_be_visible(timeout=10_000)
         arrive_trigger.scroll_into_view_if_needed()
         arrive_trigger.click()
         print(" 点击到达触发框(船票)")

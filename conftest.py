@@ -243,12 +243,12 @@ def _pw_new_context(browser: Browser, headless: bool) -> BrowserContext:
 
 def _wait_home_ready(page: Page, timeout: int = 20_000) -> None:
     """
-    等盼游首页真正挂载完成。
-    只认 nav/header 内的「船票」导航，避免命中正文里的"船票搜索歷史""船務公司線路"等文案。
+    等首页基础框架挂载完成。
+    注意：不要写死 nav/header/a + 「船票」文案——盼游导航未必是语义 nav>a，
+    正文里也有「船票搜索歷史」「船務公司線路」等同名文案，容易误判。
+    这里只等最稳定的全站外壳：页脚牌照号（服务端直出 + 全局存在）。
     """
-    page.locator('nav a:has-text("船票"), header a:has-text("船票")').first.wait_for(
-        state="visible", timeout=timeout
-    )
+    page.locator("text=354122").first.wait_for(state="visible", timeout=timeout)
 
 
 def _cookies_for_playwright(cookies) -> list:
@@ -391,25 +391,22 @@ def pw_module_context(pw_module_browser: Browser, request) -> BrowserContext:
 
 @pytest.fixture(scope="module")
 def pw_module_page(pw_module_context: BrowserContext, request) -> Page:
-    """
-    模块内多用例共享页面状态：test_01 选路线 → test_02 选日期查询。
-    只负责打开首页；具体业务入口（/ferry、/bus）由各测试模块自己的 xxx_biz fixture 跳转，
-    避免把业务路径写进公共 conftest。
-    普通独立用例请用 pw_page。
-    """
     page = pw_module_context.new_page()
     request.node._playwright_page = page
 
     page.goto(_base_url(), wait_until="domcontentloaded", timeout=30_000)
-    _wait_home_ready(page)
+
+    # 软等待：首页外壳没等到只告警，不阻断。
+    # 真正的业务首屏断言由各模块自己的 xxx_biz fixture 负责（如船票等 ferry-go-depart-city-trigger）
+    try:
+        _wait_home_ready(page, timeout=15_000)
+    except Exception as exc:
+        print(f" 首页外壳等待未命中（不阻断，交由业务 fixture 断言）: {exc}")
 
     print(f" Playwright 首页就绪（{page.viewport_size}）：{page.url}")
     yield page
 
-
-# ============================================================================
-#                       统一结果 Hook：只保留这一份
-# ============================================================================
+# 统一结果 Hook：只保留这一份
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
