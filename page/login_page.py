@@ -159,29 +159,65 @@ class LoginPage:
         self.login_modal_title.wait_for(state="visible", timeout=self.timeout)
         print(" 登录弹窗已打开")
 
-    #  ================= 页面操作：模拟真人敲键盘事件（对抗 AntD） =================
+        #  ================= 页面操作：模拟真人敲键盘事件（对抗 AntD） =================
 
-    def select_area_code(self, target_code="+86"):
+    def select_area_code(self, target_code="+86", load_timeout: float = 2.0):
         """
-        键盘流选择区号（基于默认 +852 的顺序）：+852(默认) -> ↑:+86 | ↓:+853 | ↓↓:+886
-        ⚠️ 依赖下拉项「渲染顺序」，与原版同一假设，未改。
-           新增：按完键后复核 aria-selected 那项文本，防前端插项导致静默选错区号。
+        键盘流选择区号（保留现有顺序假设）：
+        默认 +852 → ↑:+86｜↓:+853｜↓↓:+886
+
+        本次仅强化展开后的等待：
+        1. 点击展开区号；
+        2. 等 Ant Design 下拉容器可见；
+        3. 固定等待 2 秒，避免区号接口尚未返回时显示 “No data”；
+        4. 确认选项已渲染且不是 “No data”；
+        5. 再按原来的键盘流选择并回车。
+
+        :param load_timeout: 区号展开后的固定渲染等待，默认 2.0 秒。
         """
         try:
-            container = self._wait_clickable(self.area_code_container)
-            container.scroll_into_view_if_needed(timeout=self.timeout)
-            container.click(timeout=self.timeout)
-
-            dropdown = self.page.locator(self.AREA_CODE_DROPDOWN).first
-            dropdown.wait_for(state="visible", timeout=self.timeout)
-            self.page.wait_for_timeout(300)   # 等价原 sleep(0.3)：等下拉展开动画落定
-
-            # 标准化区号格式
             target_code_str = str(target_code).strip()
             if not target_code_str.startswith("+"):
                 target_code_str = f"+{target_code_str}"
 
-            # ↓↓↓ 键盘流：逐键等价 ActionChains · move_to_element → click → send_keys → perform
+            container = self._wait_clickable(self.area_code_container)
+            container.scroll_into_view_if_needed(timeout=self.timeout)
+
+            # 若已经展开，不重复点击；否则正常点击展开。
+            dropdown = self.page.locator(self.AREA_CODE_DROPDOWN).first
+            already_open = False
+            try:
+                already_open = dropdown.is_visible(timeout=300)
+            except Exception:
+                already_open = False
+
+            if not already_open:
+                container.click(timeout=self.timeout)
+
+            # 等下拉容器出现；这一步不负责等接口数据。
+            dropdown.wait_for(state="visible", timeout=self.timeout)
+
+            # ✅ 固定等待 2 秒加载/渲染，解决 No data 未加载完问题。
+            page_load_wait_ms = max(0, int(float(load_timeout) * 1000))
+            self.page.wait_for_timeout(page_load_wait_ms)
+
+            # ✅ 防止 “No data” 刚好看得见，就误以为区号已经加载完成。
+            dropdown_text = " ".join(
+                (dropdown.inner_text(timeout=2_000) or "").split()
+            )
+            if not dropdown_text or "No data" in dropdown_text or "無數據" in dropdown_text:
+                # 只补一次短重试，不把整个登录流程改成到处 sleep。
+                self.page.wait_for_timeout(500)
+                dropdown_text = " ".join(
+                    (dropdown.inner_text(timeout=2_000) or "").split()
+                )
+                if not dropdown_text or "No data" in dropdown_text or "無數據" in dropdown_text:
+                    self._attach_shot("区号下拉加载失败")
+                    raise AssertionError(
+                        f"区号下拉展开后未加载到选项，仍显示：{dropdown_text or '<空>'}"
+                    )
+
+            # ↓↓↓ 以下保持你原来的键盘流，不改定位、不改顺序逻辑。
             container.focus()
             if target_code_str == "+86":
                 self.page.keyboard.press("ArrowUp")
@@ -190,27 +226,39 @@ class LoginPage:
             elif target_code_str == "+886":
                 self.page.keyboard.press("ArrowDown")
                 self.page.keyboard.press("ArrowDown")
+            else:
+                # 不静默按错：当前键盘流只支持原版已知的四个区号。
+                raise ValueError(
+                    f"当前 select_area_code 键盘流暂不支持 {target_code_str}；"
+                    "仅支持 +852（默认）、+86、+853、+886。"
+                )
+
             self.page.keyboard.press("Enter")
 
-            # ↓↓↓ 新增兜底校验（不改行为，只加告警）：确认真的选中了目标区号
+            # ↓↓↓ 原来的选后复核保留；下拉关闭后改读选择框回显。
             try:
                 selected = dropdown.locator(
                     ".ant-select-item-option-selected, [aria-selected='true']"
                 ).first.inner_text(timeout=2_000).strip()
                 if target_code_str not in selected:
-                    shown = container.inner_text().strip()
-                    print(f"  ⚠️ 区号可能选错：期望含 {target_code_str}，"
-                          f"高亮项='{selected}'，输入框显示='{shown}'"
-                          f"（前端是否在中间插了新区号？select_area_code 依赖顺序假设）")
+                    shown = (container.inner_text() or "").strip()
+                    print(
+                        f"  ⚠️ 区号可能选错：期望含 {target_code_str}，"
+                        f"高亮项='{selected}'，输入框显示='{shown}'"
+                        f"（前端是否在中间插了新区号？select_area_code 依赖顺序假设）"
+                    )
                 else:
                     print(f" 键盘操作选择区号: {target_code_str} 成功 ✓")
             except PWTimeout:
-                # 下拉已收起属正常（Enter 后 AntD 立即关闭），改读容器回显
-                shown = container.inner_text().strip()
+                # Enter 后 AntD 通常立即收起，下拉消失是正常情况。
+                shown = (container.inner_text() or "").strip()
                 if target_code_str in shown:
                     print(f" 键盘操作选择区号: {target_code_str} 成功")
                 else:
-                    print(f"  ⚠️ 区号回显复核未通过：期望 {target_code_str}，实际显示 '{shown}'")
+                    self._attach_shot("区号选择复核失败")
+                    raise AssertionError(
+                        f"区号选择复核失败：期望 {target_code_str}，实际显示 '{shown or '<空>'}'"
+                    )
 
             return True
 
@@ -240,14 +288,14 @@ class LoginPage:
             self._attach_shot("输入密码失败")
             raise
 
-    # ================= 邮箱登录操作 =================
+        # ================= 邮箱登录操作 =================
 
     def switch_to_email_tab(self):
         """切换到邮箱登录 Tab"""
         try:
             tab = self._wait_clickable(self.login_tab_email)
             tab.click(timeout=self.timeout)
-            self.page.wait_for_timeout(300)   # 等价原 sleep(0.3)：等 Tab 切换动画
+            self.page.wait_for_timeout(300)  # 等价原 sleep(0.3)：等 Tab 切换动画
             print(" 已切换到邮箱登录 Tab")
         except Exception as e:
             print(f" 切换邮箱 Tab 失败: {e}")
@@ -289,8 +337,8 @@ class LoginPage:
                 # ↓ 旧版逻辑原样保留，只是换成 Playwright 的 evaluate 语法
                 cb.evaluate("""el => {
                     el.checked = true;
-                    el.dispatchEvent(new Event('change', { bubbles: true }));
-                    el.dispatchEvent(new Event('click',  { bubbles: true }));
+                    el.dispatchEvent(new Event('change', {bubbles: true}));
+                    el.dispatchEvent(new Event('click', {bubbles: true}));
                 }""")
                 print(" 已成功通过 JS 强制勾选《用户协议》（force_js 逃生舱）")
             else:
@@ -365,25 +413,25 @@ class LoginPage:
             return True
         return False
 
-    # ================= 业务场景整合（签名全保留） =================
+        # ================= 业务场景整合（签名全保留） =================
 
     def login_via_dropdown(self, mobile, password, area_code="+86"):
         """首页右上角头像 → 登入/註冊 → 弹窗输入账号密码 → 勾选协议 → 点击登入"""
-        self.click_login_register()      # 入口
-        self.select_area_code(area_code) # 选择区号
-        self.enter_mobile(mobile)        # 输入手机号
-        self.enter_password(password)    # 输入密码
-        self.check_agreement()           # 登录前直接勾选协议，避免触发温馨提示弹窗
-        self.click_login_button()        # 登入按钮
+        self.click_login_register()  # 入口
+        self.select_area_code(area_code)  # 选择区号（默认等待 2 秒加载）
+        self.enter_mobile(mobile)  # 输入手机号
+        self.enter_password(password)  # 输入密码
+        self.check_agreement()  # 登录前直接勾选协议，避免触发温馨提示弹窗
+        self.click_login_button()  # 登入按钮
 
     def login_via_email(self, email, password):
         """邮箱登录完整流程：切Tab → 输邮箱 → 输密码 → 勾协议 → 点击登录"""
-        self.click_login_register()      # 打开登录弹窗
-        self.switch_to_email_tab()       # 切到邮箱 Tab
-        self.enter_email(email)          # 输入邮箱
-        self.enter_password(password)    # 输入密码（复用手机号场景的密码框定位）
-        self.check_agreement()           # 勾选协议（复用）
-        self.click_login_button()        # 点击登录
+        self.click_login_register()  # 打开登录弹窗
+        self.switch_to_email_tab()  # 切到邮箱 Tab
+        self.enter_email(email)  # 输入邮箱
+        self.enter_password(password)  # 输入密码（复用手机号场景的密码框定位）
+        self.check_agreement()  # 勾选协议（复用）
+        self.click_login_button()  # 点击登录
 
     def is_login_modal_visible(self):
         """判断登录弹窗是否可见"""
@@ -393,7 +441,7 @@ class LoginPage:
         except PWTimeout:
             return False
 
-    # ================= 断言区 =================
+        # ================= 断言区 =================
 
     def is_login_success(self):
         """判断登录是否成功（通过用户信息元素）"""
